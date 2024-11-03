@@ -1,0 +1,314 @@
+@charset "UTF-8";
+body {
+  background-color: #222223;
+  color: #545457;
+  align-items: center;
+  justify-items: center;
+  font-family: var(--font-gantari);
+  letter-spacing: 0.03em;
+  font-kerning: auto;
+  /* For WebKit browsers (Chrome, Safari) */
+}
+body i, body em {
+  font-family: var(--font-gantari-italic);
+}
+body h1, body h2, body h3, body h4 {
+  font-size: 0.9em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.6em;
+  display: inline-block;
+}
+body .action-buttons {
+  display: flex;
+  align-items: center; /* Centers buttons vertically */
+  gap: 10px; /* Optional: Adds spacing between buttons */
+  padding: 0 1em;
+}
+body .action-buttons button {
+  flex: none; /* Ensures buttons don't stretch unevenly */
+}
+body .volume-level {
+  border: 2px solid rgba(68, 68, 51, 0.4);
+  border-radius: 2em;
+}
+body .toast {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.75em;
+  color: #222223;
+}
+body .toast .active {
+  border-radius: 2em;
+  background: rgba(188, 188, 187, 0.3);
+  padding: 1em 3em;
+}
+body .button-open {
+  position: absolute;
+  right: 0;
+}
+body .search-panel {
+  position: relative;
+  max-width: 28em;
+  border-right: 1px solid rgba(68, 68, 51, 0.4);
+  padding-right: 3em;
+  overflow: hidden;
+  transition: max-width 600ms ease-in-out;
+}
+body .search-panel .search-box, body .search-panel .search-results {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms ease-in-out, visibility 0ms 300ms;
+}
+body .search-panel.closed-panel {
+  max-width: 2em;
+  padding-right: 0.5em;
+}
+body .search-panel.open-panel .search-box, body .search-panel.open-panel .search-results {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms ease-in-out;
+}
+body .panel {
+  width: 28em;
+  padding: 0 1em;
+}
+body input {
+  background-color: #1f1f20;
+  border: 1px solid rgba(68, 68, 51, 0.4);
+  padding: 0.4em 1em;
+  color: #bcbcbb;
+  margin: 0.3em;
+  min-height: 1.6em;
+  border-radius: 1em;
+}
+body input:focus-visible {
+  outline: 1px solid rgba(126, 126, 95, 0.4);
+  background-color: #272728;
+}
+body button {
+  background-color: transparent;
+  padding: 0.3em 0.6em;
+  border-radius: 1em;
+  margin: 0.6em 0.3em;
+  color: inherit;
+  min-height: 3em;
+  min-width: 3em;
+  text-transform: uppercase;
+  border: none;
+  transition: opacity 600ms ease-in-out;
+}
+body button:hover {
+  transition: opacity 600ms ease-in-out;
+  cursor: pointer;
+}
+body button:hover img {
+  opacity: 0.4;
+}
+body button.drag:hover {
+  cursor: grab;
+}
+body button img {
+  opacity: 0.2;
+}
+body .btn-basic {
+  border: #48484a 1px solid;
+  font-size: 0.8em;
+}
+body .btn-basic:hover {
+  background-color: rgba(68, 68, 51, 0.2);
+}
+body .overlay {
+  position: absolute;
+  top: 0.3em;
+  left: 0.6em;
+  transition: opacity 300ms ease-in-out;
+}
+body .overlay .action {
+  background-color: rgba(51, 51, 68, 0.2666666667);
+  border-radius: 3em;
+  opacity: 0;
+  transition: opacity 600ms ease-in-out;
+}
+body .overlay .action:hover {
+  opacity: 0.75;
+}
+body .album-container {
+  position: relative;
+  text-align: center;
+}
+body .container {
+  display: inline-flex;
+  justify-content: center;
+}
+body .queue {
+  max-height: 32em;
+  overflow-y: scroll;
+  --scrollbar-color: $highlight;
+  --scrollbar-bg: $dark;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent; /* Firefox */
+  padding: 1em;
+  margin: 0 1em;
+  justify-content: space-around;
+  flex: auto;
+  /* For WebKit browsers (Chrome, Safari) */
+}
+body .queue::-webkit-scrollbar {
+  width: 8px;
+}
+body .queue::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+body .queue::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+body .search {
+  max-height: 32em;
+  max-width: 28em;
+  overflow-y: scroll;
+  --scrollbar-color: $highlight;
+  --scrollbar-bg: $dark;
+  scrollbar-color: transparent transparent; /* Firefox */
+  scrollbar-width: thin;
+}
+body .search::-webkit-scrollbar {
+  width: 8px;
+}
+body .search::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+body .search::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+body .queue-list {
+  padding: 0;
+  margin: 0;
+}
+body .extra .item, body .badge {
+  font-size: 0.6em;
+  text-transform: uppercase;
+  padding: 0.2em 0.4em;
+  margin: 0 0.3em;
+  background-color: #48484a;
+  color: #151516;
+  display: inline-block;
+  border-radius: 0.3em;
+}
+body .toggle {
+  font-size: 0.8em;
+  position: relative;
+}
+body .toggle .badge {
+  position: absolute;
+  top: 1em;
+  left: 0.7em;
+}
+body .toggle .toggle-icon {
+  top: 1.4em;
+  position: absolute;
+  left: 0.7em;
+}
+body .album-list {
+  border: 1px solid rgba(68, 68, 51, 0.4);
+  box-shadow: 0.1em 0.1em 0.3em rgba(17, 17, 34, 0.5333333333);
+  display: flex;
+  align-items: center; /* Aligns items vertically in the center */
+  gap: 1em; /* Adds space between image and description */
+  padding: 0.6em; /* Optional: add padding around the card */
+  border-radius: 1em;
+  margin: 0.6em;
+}
+body .album-list.selected {
+  background-color: #2a2a2b;
+  border: 1px solid rgba(77, 77, 58, 0.4);
+}
+body .album-list:hover {
+  background-color: #1f1f20;
+}
+body .album-list p {
+  padding: 0;
+  margin: 0;
+}
+body .album-list .cover {
+  border: 1px solid rgba(68, 68, 51, 0.4);
+  max-width: 4em;
+  border-radius: 0.6em;
+  height: auto; /* Keep aspect ratio */
+  -o-object-fit: cover;
+     object-fit: cover; /* Ensures the image doesn’t get distorted */
+}
+body .album-list .cover.playlist {
+  border-radius: 0.3em;
+}
+body .album-list .cover.albums {
+  border-radius: 0.3em;
+}
+body .album-list .cover.artists {
+  border-radius: 12em;
+  width: 4em; /* Set a fixed width */
+  height: 4em; /* Set a fixed height to keep it square */
+  overflow: hidden;
+}
+body .album-list .meta {
+  flex: 1; /* Allows the description to take up the remaining space */
+}
+body .album-list .meta .secondary {
+  font-size: 0.8em;
+}
+body .album-list .meta .artist {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+body .album-list .meta .album {
+  font-style: italic;
+}
+body .album-list .meta .title {
+  font-size: 0.8em;
+  color: #898988;
+}
+
+.album-art {
+  padding: 1em;
+  flex: 1;
+  max-width: 24em;
+  width: 24em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-basis: auto; /* default auto */
+  align-self: auto;
+  display: inline-block;
+}
+.album-art p {
+  padding: 0 0 0.1em 0;
+  margin: 0;
+}
+.album-art .cover {
+  border: 1px solid rgba(68, 68, 51, 0.4);
+  box-shadow: 1em 1em 1em rgba(17, 17, 34, 0.5333333333);
+  max-width: 20em;
+  border-radius: 1em;
+  margin: 0.6em 0.3em;
+}
+.album-art .meta {
+  padding: 0 1em;
+}
+.album-art .meta .secondary {
+  font-size: 0.8em;
+  color: #6d6d71;
+}
+.album-art .meta .artist {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-kerning: auto;
+}
+.album-art .meta .album {
+  font-style: italic;
+}
+.album-art .meta .title {
+  letter-spacing: 0.09em;
+  font-kerning: auto;
+  color: #afafae;
+}/*# sourceMappingURL=app.css.map */

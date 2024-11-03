@@ -1,0 +1,396 @@
+ //my css 
+ $dark : #222223;
+ $highlight : #44443366;
+ $shadow: #11112288;
+ $light: #bcbcbb;
+
+body {	
+	background-color: $dark;
+	color: lighten($dark,20%);
+	align-items: center;
+	justify-items: center;
+	font-family: var(--font-gantari);
+	letter-spacing: 0.03em;
+	font-kerning: auto;
+
+	i,em {
+	font-family: var(--font-gantari-italic);
+	}
+
+	h1, h2, h3, h4 {
+		font-size: 0.9em;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 0.6em;
+		display: inline-block;
+	}
+
+	.action-buttons {
+		display: flex;
+		align-items: center; /* Centers buttons vertically */
+		gap: 10px; /* Optional: Adds spacing between buttons */
+		button {
+		   flex: none; /* Ensures buttons don't stretch unevenly */
+	   }
+	   padding: 0 1em;
+	}
+	
+	.volume-level {
+		border: 2px solid $highlight;
+		border-radius: 2em;
+	}
+	
+	.toast {
+		position: absolute;
+		top: 0;
+		left: 0;
+		font-size: 0.75em;
+		color: $dark;
+		.active {
+			border-radius: 2em;
+			background: transparentize($light, 0.7);
+			padding: 1em 3em;
+		}
+	}
+
+	.button-open {
+		position: absolute;
+		right: 0;
+	}
+
+	.search-panel {
+		position: relative;
+		max-width: 28em; // Set the maximum width of the open panel
+		border-right: 1px solid $highlight;
+		padding-right: 3em;
+		overflow: hidden;
+		transition: max-width 600ms ease-in-out;
+	
+		.search-box, .search-results {
+			opacity: 0; // Start with the elements hidden
+			visibility: hidden; // Prevents interaction when closed
+			transition: opacity 300ms ease-in-out, visibility 0ms 300ms; // Delay visibility change until opacity transition ends
+		}
+	
+		&.closed-panel {
+			max-width: 2em; // Width when the panel is closed
+			padding-right: 0.5em; // Adjust padding for closed state
+		}
+	
+		&.open-panel { // New class to indicate the panel is open
+			.search-box, .search-results {
+				opacity: 1; // Fully visible when the panel opens
+				visibility: visible; // Make the elements visible
+				transition: opacity 300ms ease-in-out; // Only animate opacity on open
+			}
+		}
+	}
+	
+	.panel {
+		width: 28em;
+		padding: 0 1em;
+	}
+
+	input {
+		background-color: darken($dark, 1%);
+		border: 1px solid $highlight;
+		padding: 0.4em 1em;
+		color: $light;
+		margin: 0.3em;
+		min-height: 1.6em;
+		border-radius: 1em;
+		&:focus-visible {
+			outline: 1px solid lighten($highlight,20%);
+			background-color: lighten($dark, 2%);
+		}
+	}
+
+	button {
+		background-color: transparent;
+		padding: 0.3em 0.6em;
+		border-radius: 1em;
+		margin: 0.6em 0.3em;
+		color: inherit;
+		min-height: 3em;
+		min-width: 3em;
+		text-transform: uppercase;
+		border: none;
+		transition: opacity 600ms ease-in-out;
+		&:hover {
+			transition: opacity 600ms ease-in-out;
+			cursor: pointer;
+			img {
+				opacity: 0.4;
+			}
+		}
+
+		&.drag:hover {
+			cursor:grab;
+		}
+		img {
+			opacity: 0.2;
+		}
+	}
+
+	.btn-basic {
+
+		border: lighten($dark,15%) 1px solid;
+
+		font-size: .8em;
+		&:hover {
+			background-color: transparentize($highlight, 0.2);
+			
+		}
+
+	}
+
+	.overlay {
+
+		position: absolute;
+		top: 0.3em;
+		left: .6em;
+		transition: opacity 300ms ease-in-out;
+		.action {
+			background-color: #33334444;
+			border-radius: 3em;
+			opacity: 0;
+			transition: opacity 600ms ease-in-out;
+			&:hover {
+
+				opacity: 0.75;
+			}
+		}
+	}
+
+	
+	
+	.album-container {
+		position: relative;
+		text-align: center;
+	}
+
+	.container {
+		
+		display: inline-flex; 
+		justify-content: center;
+
+	}
+
+	.queue {
+		max-height: 32em;
+		//overflow-x: scroll;
+		//overflow-y: hidden;
+		overflow-y: scroll;
+		--scrollbar-color: $highlight;
+		--scrollbar-bg: $dark;
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent; /* Firefox */
+		padding: 1em;
+		margin: 0 1em;
+		justify-content: space-around;
+		flex: auto;
+				/* For WebKit browsers (Chrome, Safari) */
+				&::-webkit-scrollbar {
+					width: 8px;
+				}
+
+				&::-webkit-scrollbar-thumb {
+					background-color: rgba(0, 0, 0, 0); /* Transparent */
+				}
+
+				&::-webkit-scrollbar-track {
+					background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+	}
+
+
+
+	.search {
+		max-height: 32em;
+		max-width: 28em;
+		overflow-y: scroll;
+		--scrollbar-color: $highlight;
+		--scrollbar-bg: $dark;
+		scrollbar-color: transparent transparent; /* Firefox */
+		scrollbar-width: thin;
+	}
+
+	/* For WebKit browsers (Chrome, Safari) */
+.search::-webkit-scrollbar {
+    width: 8px;
+}
+
+.search::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+
+.search::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0); /* Transparent */
+}
+
+
+	.queue-list {
+		padding: 0;
+		margin: 0;
+	}
+
+	.extra .item, .badge {
+		font-size: 0.6em;
+		text-transform: uppercase;
+		padding: 0.2em 0.4em;
+		margin: 0 0.3em;
+		background-color: lighten($dark,15%);
+		color: darken($dark,5%);
+		display: inline-block;
+		border-radius: 0.3em;
+	}
+
+	.toggle {
+		font-size: 0.8em;
+		position: relative;
+		.badge {
+			position: absolute;
+			top: 1em;
+			left: 0.7em;
+		}
+		.toggle-icon {
+			top:1.4em;
+			position: absolute;
+    		left: 0.7em;
+		}
+	}
+
+	.album-list {
+		border: 1px solid $highlight;
+		box-shadow: 0.1em 0.1em 0.3em $shadow;
+		display: flex;
+		align-items: center; /* Aligns items vertically in the center */
+		gap: 1em; /* Adds space between image and description */
+		padding: 0.6em; /* Optional: add padding around the card */
+		border-radius: 1em;
+		margin: 0.6em;
+		
+		&.selected {
+			background-color: lighten($dark, 3%);
+			border: 1px solid lighten($highlight,3%);
+		}
+		
+		&:hover {
+			background-color: darken($dark,1%);
+		}
+
+		p {
+			padding: 0;
+			margin: 0;
+		}
+	
+		.cover {
+			border: 1px solid $highlight;
+			max-width: 4em;
+			border-radius: 0.6em;
+			&.playlist {
+				border-radius: 0.3em;
+			}
+			&.albums {
+				border-radius: 0.3em;
+
+			}
+			&.artists {
+				border-radius: 12em;
+				width: 4em;           /* Set a fixed width */
+				height: 4em;          /* Set a fixed height to keep it square */
+				overflow: hidden;  
+			}
+			height: auto; /* Keep aspect ratio */
+			object-fit: cover; /* Ensures the image doesn’t get distorted */
+		}
+		.meta {
+
+			flex: 1; /* Allows the description to take up the remaining space */
+			.secondary {
+				font-size: 0.8em;
+
+
+			}
+
+			.artist {
+				text-transform: uppercase;
+				letter-spacing: 0.09em;
+			}
+			.album {
+				font-style: italic;
+			}
+			.title {
+				font-size: 0.8em;
+				color: darken($light,20%);
+			}
+	
+			
+	
+	
+		}
+	 }
+	}
+	
+	.album-art {
+		padding: 1em;
+		flex: 1;
+		max-width: 24em;
+		width: 24em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		
+		flex-basis:  auto; /* default auto */
+		align-self: auto;
+	
+
+		display: inline-block;
+
+
+		p {
+			padding: 0 0 0.1em  0 ;
+			margin: 0;
+		}
+	
+		.cover {
+			border: 1px solid $highlight;
+			box-shadow: 1em 1em 1em $shadow;
+			max-width: 20em;
+			border-radius: 1em;
+			margin: 0.6em 0.3em;
+		}
+		.meta {
+		
+			padding: 0 1em;
+			
+			.secondary {
+				font-size: 0.8em;
+				color: lighten($dark,30%);
+
+			}
+
+			.artist {
+				text-transform: uppercase;
+				letter-spacing: 0.09em;
+				font-kerning: auto;
+				
+			}
+			.album {
+				font-style: italic;
+			}
+			.title {
+				letter-spacing: 0.09em;
+				font-kerning: auto;
+				color: darken($light,5%);
+			}
+	
+			
+	
+	
+		}
+	 }
+	
+
+
+ 
