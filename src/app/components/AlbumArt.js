@@ -208,8 +208,13 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 				  </span>
 			
 			  </p>
+			  {meta.uri?
+			  <>
 				<SearchSimilar refresh={refresh} setRefresh={setRefresh} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
 				<SearchSimilar refresh={refresh} setRefresh={setRefresh} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+			  </>
+				:''
+				}
 		  </div>
   
 	  </div>

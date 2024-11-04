@@ -68,10 +68,11 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
   }
 
     return (
+      <>
+    
       <div className={`panel queue-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             
- 
-
+      <div className="panel-control">
       <button 
           className="button-open"
           onClick={()=>setOpenPanel(!openPanel)}>
@@ -80,30 +81,32 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
           {openPanel? 
           
            <Image
-           src="/icons/icon-menu-close.svg"
-           alt="Toggle"
-           className="toggle-panel"
-           width={24}
-           height={24}
-       />
-          :
-
-          <Image
-           src="/icons/icon-menu-open.svg"
+           src="/icons/icon-note-multi.svg"
            alt="Toggle"
            className="toggle-panel"
            width={18}
            height={18}
        />
+          :
+
+          <Image
+           src="/icons/icon-note-multi.svg"
+           alt="Toggle"
+           className="toggle-panel"
+           width={24}
+           height={24}
+       />
        
           }
       </button>
+      </div>
+
         <div className="contained">
           <h2>Queue ({response.queue.length})</h2>
           <button className="btn-basic" onClick={() => volumioCmd("clearQueue")}>
             <Image src="/icons/icon-trash.svg" alt="Clear" className="action" width={16} height={16} />
           </button>
-          <ul className="queue queue-list">
+          <ul className="queue queue-list scroll-list">
             {response.queue.map((item, index) => (
               <AlbumArt
                 meta={item}
@@ -118,45 +121,50 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
           </ul>
         </div>
       </div>
+      </>
     );
   } else if (type === "single" && response) {
     return (
       <div className={`panel player-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             
- 
+      <div className="panel-control">
+
+
 
       <button 
           className="button-open"
           onClick={()=>setOpenPanel(!openPanel)}>
     
 
-          {openPanel? 
+    {openPanel? 
           
-           <Image
-           src="/icons/icon-menu-close.svg"
-           alt="Toggle"
-           className="toggle-panel"
-           width={24}
-           height={24}
-       />
-          :
-
           <Image
-           src="/icons/icon-menu-open.svg"
-           alt="Toggle"
-           className="toggle-panel"
-           width={18}
-           height={18}
-       />
-       
-          }
+          src="/icons/icon-album.svg"
+          alt="Toggle"
+          className="toggle-panel"
+          width={18}
+          height={18}
+      />
+         :
+
+         <Image
+          src="/icons/icon-album.svg"
+          alt="Toggle"
+          className="toggle-panel"
+          width={24}
+          height={24}
+      />
+      
+         }
       </button>
+      </div>
+
    
         <div className="contained">
 
 
         <AlbumArt meta={response} refresh={refresh} setRefresh={setRefresh} token={token} variant="single" />
-        <div className="action-buttons">
+        <div className="volume-buttons">
           <button onClick={() => volumioCmd("volume&volume=minus")}>
             <Image src="/icons/icon-volume-down.svg" alt="Vol -" className="action" width={16} height={16} />
           </button>
@@ -164,14 +172,17 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
           <button onClick={() => volumioCmd("volume&volume=plus")}>
             <Image src="/icons/icon-volume-up.svg" alt="Vol +" className="action" width={16} height={16} />
           </button>
+          {/* </div>
+          <div className="action-buttons"> */}
+            
           <button onClick={() => volumioCmd("prev")}>
-            <Image src="/icons/icon-prev.svg" alt="Prev" className="action" width={24} height={24} />
+            <Image src="/icons/icon-prev.svg" alt="Prev" className="action" width={24} height={32} />
           </button>
           <button onClick={() => volumioCmd("toggle")}>
-            <Image src="/icons/icon-play-pause.svg" alt="Play/Pause" className="action" width={32} height={32} />
+            <Image src="/icons/icon-play-pause.svg" alt="Play/Pause" className="action" width={48} height={48} />
           </button>
           <button onClick={() => volumioCmd("next")}>
-            <Image src="/icons/icon-next.svg" alt="Next" className="action" width={24} height={24} />
+            <Image src="/icons/icon-next.svg" alt="Next" className="action" width={24} height={32} />
           </button>
         </div>
         </div>

@@ -85,6 +85,8 @@ function SearchVolumio({ refresh, setRefresh }) {
                 :''
             }
 
+            <div className="panel-control">
+
             <button 
                 className="button-open"
                 onClick={()=>setOpenPanel(!openPanel)}>
@@ -93,25 +95,26 @@ function SearchVolumio({ refresh, setRefresh }) {
                 {openPanel? 
                 
                 <Image
-                src="/icons/icon-menu-close.svg"
-                alt="Toggle"
-                className="toggle-panel"
-                width={24}
-                height={24}
-            />
-               :
-     
-               <Image
-                src="/icons/icon-menu-open.svg"
+                src="/icons/icon-search.svg"
                 alt="Toggle"
                 className="toggle-panel"
                 width={18}
                 height={18}
             />
+               :
+     
+               <Image
+                src="/icons/icon-search.svg"
+                alt="Toggle"
+                className="toggle-panel"
+                width={24}
+                height={24}
+            />
             
              
                 }
             </button>
+            </div>
             
 
 
@@ -177,7 +180,7 @@ function SearchVolumio({ refresh, setRefresh }) {
                 </button>
             </div>
             
-            <div className="search-results">
+            <div className="search-results scroll-list">
             <div className="search">
                 {albumArt.tracks && (
                     <div className="tracks">

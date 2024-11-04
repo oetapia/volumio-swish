@@ -37,21 +37,52 @@ body {
 
 	.container {
 		justify-content: center;
-		gap: 1em; /* Space between panels */
+		gap: 0.6em; /* Space between panels */
 		flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-		display: inline-flex; 
+		display: flex; 
+		
 	}
+
+
+
+
+	.scroll-list {
+		max-height: 70vh;
+		//max-width: 28em;
+		overflow-y: scroll;
+		--scrollbar-color: $highlight;
+		--scrollbar-bg: $dark;
+		scrollbar-color: transparent transparent; /* Firefox */
+		scrollbar-width: thin;
+
+				/* For WebKit browsers (Chrome, Safari) */
+			&::-webkit-scrollbar {
+				width: 8px;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background-color: rgba(0, 0, 0, 0); /* Transparent */
+			}
+
+			&::-webkit-scrollbar-track {
+				background-color: rgba(0, 0, 0, 0); /* Transparent */
+			}
+	}
+
+
 	
 	.panel {
 		position: relative;
+		max-height: 100vh;
 		overflow: hidden;
-		width: 28%;
-		padding: 0 1em;
+		//max-width: 40%;
+		flex: 1;
+		padding: 0 0.6em;
 		transition: max-width 300ms ease-in-out, padding-right 300ms ease-in-out; /* Smooth transition for width and padding */
 	
 		&.closed-panel {
 			max-width: 2em; /* Width when the panel is closed */
-			padding-right: 0.5em; /* Adjust padding for closed state */
+			//padding-right: 0.5em; /* Adjust padding for closed state */
 			
 			.contained {
 				display: none; /* Completely hide contained content */
@@ -67,10 +98,14 @@ body {
 			}
 		}
 	}
+
+	.panel-control {
+		text-align: center;
+	}
 	
 	.contained {
-		border-right: 1px solid $highlight;
-		padding-right: 3em;
+		//border-right: 1px solid $highlight;
+		//padding-right: 3em;
 		overflow: hidden;
 		opacity: 0; /* Start hidden */
 		visibility: hidden; /* Prevents interaction when closed */
@@ -83,15 +118,18 @@ body {
 	
 	
 
-	.action-buttons {
+	.search-box, .action-buttons, .volume-buttons {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center; /* Centers buttons vertically */
-		gap: 10px; /* Optional: Adds spacing between buttons */
+		gap: 0.3em; /* Optional: Adds spacing between buttons */
+		justify-content: center;
 		button {
 		   flex: none; /* Ensures buttons don't stretch unevenly */
 	   }
-	   padding: 0 1em;
 	}
+
+	
 	
 	.volume-level {
 		border: 2px solid $highlight;
@@ -111,14 +149,6 @@ body {
 		}
 	}
 
-	.button-open {
-		//position: absolute;
-		//right: 0;
-
-		.toggle-panel {
-
-		}
-	}
 
 
 
@@ -203,58 +233,6 @@ body {
 	}
 
 
-
-	.queue {
-		max-height: 32em;
-		//overflow-x: scroll;
-		//overflow-y: hidden;
-		overflow-y: scroll;
-		--scrollbar-color: $highlight;
-		--scrollbar-bg: $dark;
-		scrollbar-width: thin;
-		scrollbar-color: transparent transparent; /* Firefox */
-		padding: 1em;
-		margin: 0 1em;
-		justify-content: space-around;
-		flex: auto;
-				/* For WebKit browsers (Chrome, Safari) */
-				&::-webkit-scrollbar {
-					width: 8px;
-				}
-
-				&::-webkit-scrollbar-thumb {
-					background-color: rgba(0, 0, 0, 0); /* Transparent */
-				}
-
-				&::-webkit-scrollbar-track {
-					background-color: rgba(0, 0, 0, 0); /* Transparent */
-}
-	}
-
-
-
-	.search {
-		max-height: 32em;
-		max-width: 28em;
-		overflow-y: scroll;
-		--scrollbar-color: $highlight;
-		--scrollbar-bg: $dark;
-		scrollbar-color: transparent transparent; /* Firefox */
-		scrollbar-width: thin;
-	}
-
-	/* For WebKit browsers (Chrome, Safari) */
-.search::-webkit-scrollbar {
-    width: 8px;
-}
-
-.search::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0); /* Transparent */
-}
-
-.search::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0); /* Transparent */
-}
 
 
 	.queue-list {
@@ -363,8 +341,9 @@ body {
 	.album-art {
 		padding: 1em;
 		flex: 1;
-		max-width: 24em;
-		width: 24em;
+		//max-width: 24em;
+		//width: 24em;
+		width: 100%;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -384,9 +363,10 @@ body {
 		.cover {
 			border: 1px solid $highlight;
 			box-shadow: 1em 1em 1em $shadow;
-			max-width: 20em;
+			max-width: 90%;
 			border-radius: 1em;
 			margin: 0.6em 0.3em;
+			max-height: 45vh;
 		}
 		.meta {
 		
@@ -447,7 +427,7 @@ body {
 				order: 3;
 			}
 			.panel {
-				width:90%;
+				//width:90%;
 			}
 			.album-art {
 				max-width: 16em;
