@@ -4,6 +4,9 @@
  $shadow: #11112288;
  $light: #bcbcbb;
 
+
+
+
 body {	
 	background-color: $dark;
 	color: lighten($dark,20%);
@@ -12,6 +15,9 @@ body {
 	font-family: var(--font-gantari);
 	letter-spacing: 0.03em;
 	font-kerning: auto;
+	max-width: 100vw;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
 	i,em {
 	font-family: var(--font-gantari-italic);
@@ -24,6 +30,49 @@ body {
 		letter-spacing: 0.6em;
 		display: inline-block;
 	}
+
+	.container {
+		justify-content: center;
+		gap: 1em; /* Space between panels */
+		flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+		display: inline-flex; 
+	}
+	
+	.panel {
+		position: relative;
+		width: 28em;
+		padding: 0 1em;
+		transition: max-width 300ms ease-in-out, padding-right 300ms ease-in-out; /* Smooth transition for width and padding */
+	
+		&.closed-panel {
+			max-width: 2em; /* Width when the panel is closed */
+			padding-right: 0.5em; /* Adjust padding for closed state */
+			
+			.contained {
+				display: none; /* Completely hide contained content */
+			}
+		}
+	
+		&.open-panel {
+			.contained {
+				display: block; /* Show contained content */
+				opacity: 1; /* Fully visible */
+				visibility: visible; /* Ensures elements are visible */
+				transition: opacity 300ms ease-in-out; /* Smooth transition for opacity */
+			}
+		}
+	}
+	
+	.contained {
+		border-right: 1px solid $highlight;
+		padding-right: 3em;
+		overflow: hidden;
+		opacity: 0; /* Start hidden */
+		visibility: hidden; /* Prevents interaction when closed */
+		transition: opacity 300ms ease-in-out, visibility 0ms 300ms; /* Delay visibility change until opacity transition ends */
+	}
+	
+	
 
 	.action-buttons {
 		display: flex;
@@ -54,42 +103,17 @@ body {
 	}
 
 	.button-open {
-		position: absolute;
-		right: 0;
+		//position: absolute;
+		//right: 0;
+
+		.toggle-panel {
+
+		}
 	}
 
-	.search-panel {
-		position: relative;
-		max-width: 28em; // Set the maximum width of the open panel
-		border-right: 1px solid $highlight;
-		padding-right: 3em;
-		overflow: hidden;
-		transition: max-width 600ms ease-in-out;
-	
-		.search-box, .search-results {
-			opacity: 0; // Start with the elements hidden
-			visibility: hidden; // Prevents interaction when closed
-			transition: opacity 300ms ease-in-out, visibility 0ms 300ms; // Delay visibility change until opacity transition ends
-		}
-	
-		&.closed-panel {
-			max-width: 2em; // Width when the panel is closed
-			padding-right: 0.5em; // Adjust padding for closed state
-		}
-	
-		&.open-panel { // New class to indicate the panel is open
-			.search-box, .search-results {
-				opacity: 1; // Fully visible when the panel opens
-				visibility: visible; // Make the elements visible
-				transition: opacity 300ms ease-in-out; // Only animate opacity on open
-			}
-		}
-	}
-	
-	.panel {
-		width: 28em;
-		padding: 0 1em;
-	}
+
+
+
 
 	input {
 		background-color: darken($dark, 1%);
@@ -169,12 +193,7 @@ body {
 		text-align: center;
 	}
 
-	.container {
-		
-		display: inline-flex; 
-		justify-content: center;
 
-	}
 
 	.queue {
 		max-height: 32em;
@@ -393,4 +412,28 @@ body {
 	
 
 
- 
+	 @media (prefers-color-scheme: dark) {
+		html {
+		  color-scheme: dark;
+		}
+	  }
+	 
+	
+	  @media (max-width: 800px) {
+		.container {
+			flex-direction: column; /* Stacks items vertically on smaller screens */
+			align-items: center; /* Center-aligns items in vertical layout */
+		}
+
+		.search-panel {
+			order: 3;
+		}
+
+		.queue-panel {
+			order: 2;
+		}
+	
+		html {
+			color-scheme: dark;
+		}
+	}

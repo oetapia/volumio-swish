@@ -7,6 +7,9 @@ body {
   font-family: var(--font-gantari);
   letter-spacing: 0.03em;
   font-kerning: auto;
+  max-width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /* For WebKit browsers (Chrome, Safari) */
 }
 body i, body em {
@@ -18,6 +21,39 @@ body h1, body h2, body h3, body h4 {
   text-transform: uppercase;
   letter-spacing: 0.6em;
   display: inline-block;
+}
+body .container {
+  justify-content: center;
+  gap: 1em; /* Space between panels */
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+  display: inline-flex;
+}
+body .panel {
+  position: relative;
+  width: 28em;
+  padding: 0 1em;
+  transition: max-width 300ms ease-in-out, padding-right 300ms ease-in-out; /* Smooth transition for width and padding */
+}
+body .panel.closed-panel {
+  max-width: 2em; /* Width when the panel is closed */
+  padding-right: 0.5em; /* Adjust padding for closed state */
+}
+body .panel.closed-panel .contained {
+  display: none; /* Completely hide contained content */
+}
+body .panel.open-panel .contained {
+  display: block; /* Show contained content */
+  opacity: 1; /* Fully visible */
+  visibility: visible; /* Ensures elements are visible */
+  transition: opacity 300ms ease-in-out; /* Smooth transition for opacity */
+}
+body .contained {
+  border-right: 1px solid rgba(68, 68, 51, 0.4);
+  padding-right: 3em;
+  overflow: hidden;
+  opacity: 0; /* Start hidden */
+  visibility: hidden; /* Prevents interaction when closed */
+  transition: opacity 300ms ease-in-out, visibility 0ms 300ms; /* Delay visibility change until opacity transition ends */
 }
 body .action-buttons {
   display: flex;
@@ -43,36 +79,6 @@ body .toast .active {
   border-radius: 2em;
   background: rgba(188, 188, 187, 0.3);
   padding: 1em 3em;
-}
-body .button-open {
-  position: absolute;
-  right: 0;
-}
-body .search-panel {
-  position: relative;
-  max-width: 28em;
-  border-right: 1px solid rgba(68, 68, 51, 0.4);
-  padding-right: 3em;
-  overflow: hidden;
-  transition: max-width 600ms ease-in-out;
-}
-body .search-panel .search-box, body .search-panel .search-results {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 300ms ease-in-out, visibility 0ms 300ms;
-}
-body .search-panel.closed-panel {
-  max-width: 2em;
-  padding-right: 0.5em;
-}
-body .search-panel.open-panel .search-box, body .search-panel.open-panel .search-results {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 300ms ease-in-out;
-}
-body .panel {
-  width: 28em;
-  padding: 0 1em;
 }
 body input {
   background-color: #1f1f20;
@@ -137,10 +143,6 @@ body .overlay .action:hover {
 body .album-container {
   position: relative;
   text-align: center;
-}
-body .container {
-  display: inline-flex;
-  justify-content: center;
 }
 body .queue {
   max-height: 32em;
@@ -311,4 +313,25 @@ body .album-list .meta .title {
   letter-spacing: 0.09em;
   font-kerning: auto;
   color: #afafae;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column; /* Stacks items vertically on smaller screens */
+    align-items: center; /* Center-aligns items in vertical layout */
+  }
+  .search-panel {
+    order: 3;
+  }
+  .queue-panel {
+    order: 2;
+  }
+  html {
+    color-scheme: dark;
+  }
 }/*# sourceMappingURL=app.css.map */

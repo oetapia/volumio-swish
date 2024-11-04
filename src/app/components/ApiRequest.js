@@ -6,6 +6,8 @@ import Image from "next/image";
 
 function ApiRequest({ request, refresh, setRefresh, token, type }) {
   const [response, setResponse] = useState(null);
+  const [openPanel, setOpenPanel] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const localhost = "http://volumio.local";
 
@@ -57,11 +59,46 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
   
 
   if (type === "multi" && response && response.queue) {
-
+    {
+      loading?
+      <p className="toast">
+          Loading...
+      </p>    
+      :''
+  }
 
     return (
-      <div className="panel">
-        <div className="">
+      <div className={`panel queue-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
+            
+ 
+
+      <button 
+          className="button-open"
+          onClick={()=>setOpenPanel(!openPanel)}>
+    
+
+          {openPanel? 
+          
+           <Image
+           src="/icons/icon-menu-close.svg"
+           alt="Toggle"
+           className="toggle-panel"
+           width={24}
+           height={24}
+       />
+          :
+
+          <Image
+           src="/icons/icon-menu-open.svg"
+           alt="Toggle"
+           className="toggle-panel"
+           width={18}
+           height={18}
+       />
+       
+          }
+      </button>
+        <div className="contained">
           <h2>Queue ({response.queue.length})</h2>
           <button className="btn-basic" onClick={() => volumioCmd("clearQueue")}>
             <Image src="/icons/icon-trash.svg" alt="Clear" className="action" width={16} height={16} />
@@ -84,7 +121,40 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
     );
   } else if (type === "single" && response) {
     return (
-      <div className="panel">
+      <div className={`panel   ${openPanel ? " open-panel ":" closed-panel "}`}>
+            
+ 
+
+      <button 
+          className="button-open"
+          onClick={()=>setOpenPanel(!openPanel)}>
+    
+
+          {openPanel? 
+          
+           <Image
+           src="/icons/icon-menu-close.svg"
+           alt="Toggle"
+           className="toggle-panel"
+           width={24}
+           height={24}
+       />
+          :
+
+          <Image
+           src="/icons/icon-menu-open.svg"
+           alt="Toggle"
+           className="toggle-panel"
+           width={18}
+           height={18}
+       />
+       
+          }
+      </button>
+   
+        <div className="contained">
+
+
         <AlbumArt meta={response} refresh={refresh} setRefresh={setRefresh} token={token} variant="single" />
         <div className="action-buttons">
           <button onClick={() => volumioCmd("volume&volume=minus")}>
@@ -104,12 +174,12 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
             <Image src="/icons/icon-next.svg" alt="Next" className="action" width={24} height={24} />
           </button>
         </div>
+        </div>
       </div>
     );
   } else {
     return (
       <div className="panel">
-        <p>Loading...</p>
       </div>
     );
   }

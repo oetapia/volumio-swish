@@ -75,7 +75,7 @@ function SearchVolumio({ refresh, setRefresh }) {
     }
 
     return (
-        <div className={`search-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
+        <div className={`panel search-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             
             {
                 loading?
@@ -92,27 +92,31 @@ function SearchVolumio({ refresh, setRefresh }) {
 
                 {openPanel? 
                 
-                 <Image
-                 src="/icons/icon-close.svg"
-                 alt="Toggle"
-                 className="toggle-icon"
-                 width={24}
-                 height={24}
-             />
-                :
-
                 <Image
-                 src="/icons/icon-search.svg"
-                 alt="Toggle"
-                 className="toggle-icon"
-                 width={18}
-                 height={18}
-             />
+                src="/icons/icon-menu-close.svg"
+                alt="Toggle"
+                className="toggle-panel"
+                width={24}
+                height={24}
+            />
+               :
+     
+               <Image
+                src="/icons/icon-menu-open.svg"
+                alt="Toggle"
+                className="toggle-panel"
+                width={18}
+                height={18}
+            />
+            
              
-          
-                
                 }
             </button>
+            
+
+
+            <div className="contained">
+
             <div className="search-box">
                 <input 
                     type="text" 
@@ -172,6 +176,7 @@ function SearchVolumio({ refresh, setRefresh }) {
                     />
                 </button>
             </div>
+            
             <div className="search-results">
             <div className="search">
                 {albumArt.tracks && (
@@ -209,6 +214,9 @@ function SearchVolumio({ refresh, setRefresh }) {
                 )}
                 </div>
             </div>
+            </div>
+
+
         </div>
     );
 }
