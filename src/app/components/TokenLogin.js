@@ -69,7 +69,7 @@ function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
 
   return (
     <div className="overlay toast">
-      {token ? "" : <p className="active">Fetching token...</p>}
+      {token ? "" : <p className="active">Loading</p>}
     </div>
   );
 }

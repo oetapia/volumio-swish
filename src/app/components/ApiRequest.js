@@ -121,7 +121,7 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
     );
   } else if (type === "single" && response) {
     return (
-      <div className={`panel   ${openPanel ? " open-panel ":" closed-panel "}`}>
+      <div className={`panel player-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             
  
 

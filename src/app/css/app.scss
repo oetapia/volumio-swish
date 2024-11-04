@@ -31,6 +31,10 @@ body {
 		display: inline-block;
 	}
 
+	.whole {
+		width: 100%;
+	}
+
 	.container {
 		justify-content: center;
 		gap: 1em; /* Space between panels */
@@ -40,7 +44,8 @@ body {
 	
 	.panel {
 		position: relative;
-		width: 28em;
+		overflow: hidden;
+		width: 28%;
 		padding: 0 1em;
 		transition: max-width 300ms ease-in-out, padding-right 300ms ease-in-out; /* Smooth transition for width and padding */
 	
@@ -70,6 +75,10 @@ body {
 		opacity: 0; /* Start hidden */
 		visibility: hidden; /* Prevents interaction when closed */
 		transition: opacity 300ms ease-in-out, visibility 0ms 300ms; /* Delay visibility change until opacity transition ends */
+	}
+
+	.player-panel {
+		text-align: center;
 	}
 	
 	
@@ -420,17 +429,34 @@ body {
 	 
 	
 	  @media (max-width: 800px) {
-		.container {
-			flex-direction: column; /* Stacks items vertically on smaller screens */
-			align-items: center; /* Center-aligns items in vertical layout */
-		}
 
-		.search-panel {
-			order: 3;
-		}
+		body {
 
-		.queue-panel {
-			order: 2;
+			.container {
+				flex-direction: column; /* Stacks items vertically on smaller screens */
+				align-items: center; /* Center-aligns items in vertical layout */
+			}
+
+			.contained {
+				padding-right: 0;
+			}
+
+	
+		
+			.queue-panel {
+				order: 3;
+			}
+			.panel {
+				width:90%;
+			}
+			.album-art {
+				max-width: 16em;
+				width: 16em;
+				text-align: center;
+				.cover {
+					max-width: 12em;
+				}
+			}
 		}
 	
 		html {

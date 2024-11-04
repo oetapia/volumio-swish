@@ -22,6 +22,9 @@ body h1, body h2, body h3, body h4 {
   letter-spacing: 0.6em;
   display: inline-block;
 }
+body .whole {
+  width: 100%;
+}
 body .container {
   justify-content: center;
   gap: 1em; /* Space between panels */
@@ -30,7 +33,8 @@ body .container {
 }
 body .panel {
   position: relative;
-  width: 28em;
+  overflow: hidden;
+  width: 28%;
   padding: 0 1em;
   transition: max-width 300ms ease-in-out, padding-right 300ms ease-in-out; /* Smooth transition for width and padding */
 }
@@ -54,6 +58,9 @@ body .contained {
   opacity: 0; /* Start hidden */
   visibility: hidden; /* Prevents interaction when closed */
   transition: opacity 300ms ease-in-out, visibility 0ms 300ms; /* Delay visibility change until opacity transition ends */
+}
+body .player-panel {
+  text-align: center;
 }
 body .action-buttons {
   display: flex;
@@ -321,15 +328,26 @@ body .album-list .meta .title {
   }
 }
 @media (max-width: 800px) {
-  .container {
+  body .container {
     flex-direction: column; /* Stacks items vertically on smaller screens */
     align-items: center; /* Center-aligns items in vertical layout */
   }
-  .search-panel {
+  body .contained {
+    padding-right: 0;
+  }
+  body .queue-panel {
     order: 3;
   }
-  .queue-panel {
-    order: 2;
+  body .panel {
+    width: 90%;
+  }
+  body .album-art {
+    max-width: 16em;
+    width: 16em;
+    text-align: center;
+  }
+  body .album-art .cover {
+    max-width: 12em;
   }
   html {
     color-scheme: dark;
