@@ -4,6 +4,7 @@ import { useState } from "react";
 import ApiRequest from "./components/ApiRequest";
 import SearchVolumio from "./components/SearchVolumio";
 import TokenLogin from "./components/TokenLogin";
+import PlayingNow from "./components/PlayingNow";
 
 
 export default function Home() {
@@ -26,8 +27,7 @@ export default function Home() {
             <SearchVolumio refresh={refresh} setRefresh={setRefresh} />   
                         
             <ApiRequest refresh={refresh} setRefresh={setRefresh} token={token} request={"/api/v1/getQueue"} type="multi"/>      
-            <ApiRequest  refresh={refresh} setRefresh={setRefresh} token={token} request={"/api/v1/getState"} type="single"/>
- 
+            <PlayingNow refresh={refresh} setRefresh={setRefresh} token={token} request={"/api/v1/getState"} type="single"/>
         
       </main>
 

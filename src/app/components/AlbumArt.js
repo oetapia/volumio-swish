@@ -121,7 +121,12 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	  <li className={"album-list"} key={meta.uri} >
   
 		  <div className="album-container">
-			  <img src={meta.albumart} className="cover" />
+		 	 <img
+					className={`cover ${variant}`}
+					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
+					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+					alt={meta.title || "Default Album Art"}
+				/>
 			  <button className="overlay btn" onClick={()=>playItem(index)}>
 				  <Image
 				  src="/icons/icon-play-circle.svg"
@@ -178,7 +183,12 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	return (
 	  <div className={"album-art"}>
   
-		  <img src={meta.albumart} className="cover" />
+ 			 <img
+					className={`cover ${variant}`}
+					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
+					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+					alt={meta.title || "Default Album Art"}
+				/>
   
 		  <div className="meta">
 			  <p className="primary">
@@ -196,12 +206,16 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 			  </span> 
 			  </p>
 			  <p className="extra">
+			  {meta.trackType?
 				  <span className="item">
 					  {meta.trackType}
 				  </span>
+				  :""}
+				  {meta.samplerate? 
 				  <span className="item">
 					  {meta.samplerate}
-				  </span>
+				  </span> : 
+				  ""}
 				  
 				  <span className="item">
 				  	{formatDuration(meta.duration)}

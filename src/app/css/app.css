@@ -314,6 +314,10 @@ body .album-list .meta .title {
   body .contained {
     padding-right: 0;
   }
+  body input {
+    width: 70%;
+    font-size: 12pt;
+  }
   body .queue-panel {
     order: 3;
   }
