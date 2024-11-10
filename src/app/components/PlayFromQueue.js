@@ -33,7 +33,7 @@ function PlayFromQueue({ localhost,index }) {
 			className="action"
 			width={32}
 			height={32}
-			/>{index}
+			/>
 		  </button>
 			
 		);

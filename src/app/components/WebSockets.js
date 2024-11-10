@@ -5,50 +5,53 @@ import io from 'socket.io-client';
 
 const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue }) => {
   const [socket, setSocket] = useState(null);
-
+  
   useEffect(() => {
-    const socketConnection = io(url, {
-      path: '/socket.io',
-      transports: ['websocket', 'polling'],
-    });
-
-    socketConnection.on('connect', () => {
-      console.log('WebSocket connected');
-    });
-
-    socketConnection.on('connect_error', (error) => {
-      console.error('Connection error:', error);
-    });
-
-    socketConnection.on('disconnect', () => {
-      console.log('WebSocket disconnected');
-    });
-
-    // Listen for the pushQueue event for queue data
-    socketConnection.on('pushQueue', (data) => {
-      console.log('Received queue data:', data); // Debug log
-      setResponseQueue(data);  // Ensure this updates the queue state in the parent
-    });
-
-    // Listen for the pushState event for playback state
-    socketConnection.on('pushState', (data) => {
-      console.log('Received state data:', data); // Debug log
-      setResponseState(data);
-    });
-
-    setSocket(socketConnection);
-
-    return () => {
-      console.log('Cleaning up WebSocket connection...');
-      socketConnection.disconnect();
-    };
+    if (!socket) {
+      const socketConnection = io(url, {
+        path: '/socket.io',
+        transports: ['websocket', 'polling'],
+      });
+  
+      socketConnection.on('connect', () => {
+        console.log('WebSocket connected');
+      });
+  
+      socketConnection.on('connect_error', (error) => {
+        console.error('Connection error:', error);
+      });
+  
+      socketConnection.on('disconnect', () => {
+        console.log('WebSocket disconnected');
+      });
+  
+      socketConnection.on('pushQueue', (data) => {
+        setResponseQueue(data);
+      });
+  
+      socketConnection.on('pushState', (data) => {
+        setResponseState(data);
+      });
+  
+      setSocket(socketConnection);
+  
+      return () => {
+        console.log('Cleaning up WebSocket connection...');
+        socketConnection.disconnect();
+      };
+    }
   }, [url]);
 
   // Send command when socketCommand changes
   useEffect(() => {
     if (socket && socketCommand) {
       if (typeof socketCommand === 'object') {
-        socket.emit(socketCommand.command, socketCommand.value);
+        if (socketCommand.command === "moveQueue") {
+          // Ensure we only send the necessary data
+          socket.emit("moveQueue", { from: socketCommand.from, to: socketCommand.to });
+        } else {
+          socket.emit(socketCommand.command, socketCommand.value);
+        }
       } else {
         socket.emit(socketCommand);
       }

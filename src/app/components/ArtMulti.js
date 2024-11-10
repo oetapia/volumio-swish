@@ -9,9 +9,6 @@ function ArtMulti({meta,  index, variant, volumioSocketCmd, localhost}) {
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
 
 
-function handleMovement(move){
-	console.log("movement",move)
-}
 
   function formatDuration(duration) {
 	const minutes = Math.floor(duration / 60);
@@ -25,7 +22,7 @@ function handleMovement(move){
 
 
 	return (
-	  <li className={"album-list"} key={meta.uri} >
+	  <div className={"album-list"} key={meta.uri} >
   
 		  <div className="album-container">
 		 	 <img
@@ -34,15 +31,6 @@ function handleMovement(move){
 					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
 					alt={meta.title || "Default Album Art"}
 				/>
-			        {/*  <button className="overlay btn" onClick={()=>volumioSocketCmd("play",index)}>
-                  <Image
-                  src="/icons/icon-play-circle.svg"
-                  alt="Play"
-                  className="action"
-                  width={32}
-                  height={32}
-                  />
-                </button> */}
 				<PlayFromQueue index={index} localhost={localhost}></PlayFromQueue>
 		  </div>
   
@@ -90,19 +78,11 @@ function handleMovement(move){
 					height={16}
 				/>
 			</button>
-			<button className="drag" onClick={(e) => handleMovement(e.target)}>
-				<Image
-					src="/icons/icon-drag.svg"
-					alt="Drag Item"
-					className="action"
-					width={16}
-					height={16}
-				/>
-			</button>
+
 		  </div>
 
 		
-	  </li>
+	  </div>
   
 	)
 

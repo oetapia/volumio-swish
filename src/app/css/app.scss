@@ -249,6 +249,23 @@ body {
 		}
 	}
 
+	.editable-list {
+		padding: 0;
+		margin: 0;
+		.list-item {
+			flex: auto;
+			list-style-type: none;
+			display: flex;
+		}
+		.album-list {
+			flex-grow: 1;
+		}
+
+	
+
+	}
+
+	
 	
 	
 	.album-container {
@@ -432,7 +449,7 @@ body {
 	  }
 	 
 	
-	  @media (max-width: 800px) {
+	  @media (max-width: 1200px) {
 
 		body {
 
@@ -446,7 +463,7 @@ body {
 			}
 
 			input {
-				width: 70%;
+				//width: 70%;
 				font-size: 12pt;
 			}
 		
@@ -464,6 +481,13 @@ body {
 					max-width: 12em;
 				}
 			}
+
+
+
+
+	.panel {
+		width: 100%;
+	}
 		}
 	
 		html {

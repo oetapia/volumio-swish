@@ -185,6 +185,18 @@ body .overlay .action {
 body .overlay .action:hover {
   opacity: 0.75;
 }
+body .editable-list {
+  padding: 0;
+  margin: 0;
+}
+body .editable-list .list-item {
+  flex: auto;
+  list-style-type: none;
+  display: flex;
+}
+body .editable-list .album-list {
+  flex-grow: 1;
+}
 body .album-container {
   position: relative;
   text-align: center;
@@ -325,7 +337,7 @@ body .album-list .meta .title {
     color-scheme: dark;
   }
 }
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   body .container {
     flex-direction: column; /* Stacks items vertically on smaller screens */
     align-items: center; /* Center-aligns items in vertical layout */
@@ -334,7 +346,6 @@ body .album-list .meta .title {
     padding-right: 0;
   }
   body input {
-    width: 70%;
     font-size: 12pt;
   }
   body .queue-panel {
@@ -347,6 +358,9 @@ body .album-list .meta .title {
   }
   body .album-art .cover {
     max-width: 12em;
+  }
+  body .panel {
+    width: 100%;
   }
   html {
     color-scheme: dark;

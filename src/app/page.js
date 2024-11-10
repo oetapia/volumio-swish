@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import ApiRequest from "./components/ApiRequest";
 import SearchVolumio from "./components/SearchVolumio";
 import TokenLogin from "./components/TokenLogin";
 import PlayingNow from "./components/PlayingNow";
@@ -9,7 +8,7 @@ import QueueList from "./components/QueueList";
 import WebSockets from './components/WebSockets';
 
 export default function Home() {
-  
+
   const [refresh, setRefresh] = useState(false)
   const [token, setToken] = useState(null);
   const [socketCommand, setSocketCommand] = useState(null);
@@ -17,14 +16,15 @@ export default function Home() {
   const [responseQueue, setResponseQueue] = useState(null);
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+  const [queueMove, setQueueMove] = useState(null)
 
   //console.log("from env",clientId,clientSecret,token)
-  
+
   const localhost = "http://volumio.local";
 
   // Function to handle different player controls using WebSocket commands
   function volumioSocketCmd(command, value = null) {
-    switch(command) {
+    switch (command) {
       case "play":
       case "pause":
       case "unmute":
@@ -44,12 +44,12 @@ export default function Home() {
         setSocketCommand({ command: "setRepeat", value: { value } });
         break;
       case "volume":
-        setSocketCommand({ command: "volume", value: value  });
+        setSocketCommand({ command: "volume", value: value });
         break;
       case "getQueue":
-          console.log("Setting socket command to getQueue"); // Debug log
-          setSocketCommand(command); // Should trigger getQueue in WebSockets.js
-          break;
+        console.log("Setting socket command to getQueue"); // Debug log
+        setSocketCommand(command); // Should trigger getQueue in WebSockets.js
+        break;
       case "getState":
         setSocketCommand(command);
         break;
@@ -61,7 +61,7 @@ export default function Home() {
         break;
       case "moveQueue":
         setSocketCommand({ command: "moveQueue", from: value.from, to: value.to });
-        break;  
+        break;
       default:
         console.error("Unknown command");
     }
@@ -70,38 +70,43 @@ export default function Home() {
   return (
     <div className={"whole"}>
 
-      
+
       <TokenLogin ClientId={clientId} token={token} setToken={setToken} ClientSecret={clientSecret} ></TokenLogin>
 
-      <WebSockets 
-          url="http://volumio.local" 
-          socketCommand={socketCommand} 
-          setResponseState={setResponseState}
-          setResponseQueue={setResponseQueue}
-        />
-    
+      <WebSockets
+        url="http://volumio.local"
+        socketCommand={socketCommand}
+        setResponseState={setResponseState}
+        setResponseQueue={setResponseQueue}
+      />
+
+
+
       <main className={"container"}>
 
-            <SearchVolumio refresh={refresh} setRefresh={setRefresh} />   
-                        
-            <QueueList 
-            refresh={refresh} 
-            setRefresh={setRefresh}
-            token={token}  
-            response={responseQueue} 
-            localhost={localhost}
-            volumioSocketCmd={volumioSocketCmd}
-           />   
-            <PlayingNow 
-              refresh={refresh} 
-              setRefresh={setRefresh} 
-              token={token}   
-              localhost={localhost}
-              volumioSocketCmd={volumioSocketCmd} 
-              response={responseState} 
-              />
-            
-        
+        <SearchVolumio refresh={refresh} setRefresh={setRefresh} />
+
+
+
+        <QueueList
+          onMove={volumioSocketCmd}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          token={token}
+          response={responseQueue}
+          localhost={localhost}
+          volumioSocketCmd={volumioSocketCmd}
+        />
+        <PlayingNow
+          refresh={refresh}
+          setRefresh={setRefresh}
+          token={token}
+          localhost={localhost}
+          volumioSocketCmd={volumioSocketCmd}
+          response={responseState}
+        />
+
+
       </main>
 
 
