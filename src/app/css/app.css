@@ -91,8 +91,27 @@ body .search-box button, body .action-buttons button, body .volume-buttons butto
   flex: none; /* Ensures buttons don't stretch unevenly */
 }
 body .volume-level {
-  border: 2px solid rgba(68, 68, 51, 0.4);
-  border-radius: 2em;
+  width: 1.6em;
+  position: relative;
+  font-size: 0.7em;
+  padding-top: 0.3em;
+}
+body .volume-level .overlay {
+  top: 0;
+  left: 0;
+}
+body .progress-container {
+  width: 100%; /* Total width of the progress bar */
+  height: 0.3em; /* Height of the progress bar */
+  background-color: rgba(68, 68, 51, 0.4); /* Background color */
+  border-radius: 5px; /* Rounded corners */
+  position: relative;
+  overflow: hidden; /* Ensures inner fill doesn't overflow */
+}
+body .progress-fill {
+  height: 100%; /* Fill the entire height of the container */
+  background-color: rgba(97, 97, 73, 0.4); /* Fill color */
+  transition: width 0.5s ease-in-out; /* Smooth transition for width changes */
 }
 body .toast {
   position: absolute;

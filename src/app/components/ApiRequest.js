@@ -10,7 +10,7 @@ function ApiRequest({ request, refresh, setRefresh, token, type }) {
   const [loading, setLoading] = useState(false);
 
   const localhost = "http://volumio.local";
-  const websockets = "ws://volumio.local";
+
 
 
   async function volumioCmd(command) {

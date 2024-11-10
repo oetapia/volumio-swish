@@ -4,7 +4,7 @@ import AddToQueue from './AddToQueue';
 import SearchSimilar from "./SimilarToTidal";
 import RemoveFromQueue from './RemoveFromQueue';
 
-function AlbumArt({meta, type, index, refresh, setRefresh, variant, token}) {
+function AlbumArt({meta, type, index, refresh, setRefresh, variant, token,playCommand}) {
 
 
 
@@ -127,15 +127,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
 					alt={meta.title || "Default Album Art"}
 				/>
-			  <button className="overlay btn" onClick={()=>playItem(index)}>
-				  <Image
-				  src="/icons/icon-play-circle.svg"
-				  alt="Play"
-				  className="action"
-				  width={32}
-				  height={32}
-				  />
-			  </button>
+			  {playCommand}
 		  </div>
   
 		  <div className="meta">

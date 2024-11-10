@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 
-function AddToQueue({ trackId, sourceUrl, type, refresh, setRefresh, variant }) {
+function AddToQueue({ trackId, sourceUrl, type, variant }) {
 	// Set up a queue with an initial resolved promise
 
 
@@ -40,7 +40,7 @@ function AddToQueue({ trackId, sourceUrl, type, refresh, setRefresh, variant }) 
                 console.log("Response from Volumio:", json);
 
                 // Trigger refresh after successful queue addition
-                setRefresh(!refresh);  // Use setRefresh to toggle refresh state
+                //setRefresh(!refresh);  // Use setRefresh to toggle refresh state
                 
 				
 				// Optional: You can update the UI here if needed

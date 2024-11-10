@@ -1,57 +1,24 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import AlbumArt from './AlbumArt';
-import WebSockets from './WebSockets';
+import ArtSingle from './ArtSingle';
 import Image from "next/image";
 
-function PlayingNow({ request, refresh, setRefresh, token, type }) {
-  const [response, setResponse] = useState(null);
+function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd }) {
+  
   const [openPanel, setOpenPanel] = useState(true);
-  const [socketCommand, setSocketCommand] = useState(null);
 
-  // Function to handle different player controls using WebSocket commands
-  function volumioSocketCmd(command, value = null) {
-    switch(command) {
-      case "play":
-      case "pause":
-      case "unmute":
-      case "mute":
-      case "stop":
-      case "prev":
-      case "next":
-        setSocketCommand(command);
-        break;
-      case "seek":
-        if (value !== null) setSocketCommand(`seek ${value}`);
-        break;
-      case "random":
-        setSocketCommand({ command: "setRandom", value: { value } });
-        break;
-      case "repeat":
-        setSocketCommand({ command: "setRepeat", value: { value } });
-        break;
-      case "volume":
-        setSocketCommand({ command: "volume", value: value  });
-        break;
-      default:
-        console.error("Unknown command");
-    }
-  }
+
 
   useEffect(() => {
-    setSocketCommand(`getState`);
+    volumioSocketCmd(`getState`);
   }, [])
   
-
+  
   return (
     <div className={`panel player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
       <div className="panel-control">
-        <WebSockets 
-          url="http://volumio.local" 
-          socketCommand={socketCommand} 
-          setStatus={setResponse}
-        />
+
 
         <button 
           className="button-open"
@@ -68,7 +35,7 @@ function PlayingNow({ request, refresh, setRefresh, token, type }) {
       <div className="contained">
         {response && (
           <>
-            <AlbumArt meta={response} refresh={refresh} setRefresh={setRefresh} token={token} variant="single" />
+            <ArtSingle meta={response} refresh={refresh} setRefresh={setRefresh} token={token} variant="single" />
             <div className="volume-buttons">
             {response.mute?
             <button onClick={() => volumioSocketCmd("unmute")}>
@@ -80,7 +47,23 @@ function PlayingNow({ request, refresh, setRefresh, token, type }) {
               <button onClick={() => volumioSocketCmd("volume", "-")}>
                 <Image src="/icons/icon-volume-down.svg" alt="Vol -" className="action" width={16} height={16} />
               </button>
-              {response.volume && <button className="volume-level">{response.volume}</button>}
+              {response.volume && (
+                <div className='volume-level'>
+                {response.volume}
+                <div className="progress-container overlay">
+                <div
+                className="progress-fill"
+                title={response.volume}
+                style={{ width: `${Math.min(Math.max(response.volume, 0), 100)}%` }}
+                >
+                </div>
+                </div>
+                </div>
+              
+              
+              )}
+
+
               <button onClick={() => volumioSocketCmd("volume", "+")}>
                 <Image src="/icons/icon-volume-up.svg" alt="Vol +" className="action" width={16} height={16} />
               </button>

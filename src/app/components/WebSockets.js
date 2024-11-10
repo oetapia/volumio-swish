@@ -1,12 +1,12 @@
+// WebSockets.js
+
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const WebSockets = ({ url, socketCommand, setStatus }) => {
+const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue }) => {
   const [socket, setSocket] = useState(null);
-  const [connectionStatus, setConnectionStatus] = useState("Connecting...");
 
   useEffect(() => {
-    // Initialize the socket connection
     const socketConnection = io(url, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],
@@ -14,23 +14,26 @@ const WebSockets = ({ url, socketCommand, setStatus }) => {
 
     socketConnection.on('connect', () => {
       console.log('WebSocket connected');
-      setConnectionStatus("Connected");
     });
 
     socketConnection.on('connect_error', (error) => {
       console.error('Connection error:', error);
-      setConnectionStatus("Connection Error");
     });
 
     socketConnection.on('disconnect', () => {
       console.log('WebSocket disconnected');
-      setConnectionStatus("Disconnected");
     });
 
-    // Listen for `pushState` responses from Volumio
+    // Listen for the pushQueue event for queue data
+    socketConnection.on('pushQueue', (data) => {
+      console.log('Received queue data:', data); // Debug log
+      setResponseQueue(data);  // Ensure this updates the queue state in the parent
+    });
+
+    // Listen for the pushState event for playback state
     socketConnection.on('pushState', (data) => {
-      console.log('Received state:', data);
-      setStatus(data);  // Update the status with the latest state
+      console.log('Received state data:', data); // Debug log
+      setResponseState(data);
     });
 
     setSocket(socketConnection);
@@ -41,8 +44,8 @@ const WebSockets = ({ url, socketCommand, setStatus }) => {
     };
   }, [url]);
 
+  // Send command when socketCommand changes
   useEffect(() => {
-    // Send command when `socketCommand` changes
     if (socket && socketCommand) {
       if (typeof socketCommand === 'object') {
         socket.emit(socketCommand.command, socketCommand.value);
@@ -53,7 +56,7 @@ const WebSockets = ({ url, socketCommand, setStatus }) => {
     }
   }, [socket, socketCommand]);
 
-  //return <div>{connectionStatus}</div>;
+  //return <div>WebSocket Connection Status</div>;
 };
 
 export default WebSockets;

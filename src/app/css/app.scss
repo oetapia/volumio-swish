@@ -132,8 +132,32 @@ body {
 	
 	
 	.volume-level {
-		border: 2px solid $highlight;
-		border-radius: 2em;
+		width: 1.6em;
+		//border: 2px solid $highlight;
+		//border-radius: 2em;
+		position: relative;
+		font-size: 0.7em;
+		padding-top: 0.3em;
+		.overlay {
+			top: 0;
+			//bottom: 0;
+			left: 0
+		}
+	}
+
+	.progress-container {
+		width: 100%; /* Total width of the progress bar */
+		height: 0.3em; /* Height of the progress bar */
+		background-color: $highlight; /* Background color */
+		border-radius: 5px; /* Rounded corners */
+		position: relative;
+		overflow: hidden; /* Ensures inner fill doesn't overflow */
+	}
+
+	.progress-fill {
+		height: 100%; /* Fill the entire height of the container */
+		background-color: lighten($highlight,10%); /* Fill color */
+		transition: width 0.5s ease-in-out; /* Smooth transition for width changes */
 	}
 	
 	.toast {
