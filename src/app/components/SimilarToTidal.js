@@ -5,7 +5,7 @@ import Image from "next/image";
 import AddToQueue from './AddToQueue';
 
 
-function SearchTidal({passedId, refresh, setRefresh, token, type}) {
+function SearchTidal({passedId,  token, type}) {
 	
 
 const [data, setData] = useState(null)
@@ -20,11 +20,28 @@ var COUNTRY_CODE = "DE"
 
 // Function to fetch similar tracks
 async function searchSimilarTracks(trackId) {
-	const url = type==="radio"?`${TIDAL_API_BASE_URL}/tracks/${trackId}/relationships/similarTracks`:`${TIDAL_API_BASE_URL}/tracks/${trackId}/relationships/albums`;
-	const params = new URLSearchParams({
-		countryCode: COUNTRY_CODE,
-		include: "similarTracks"
-	});
+
+	var url
+	var params
+
+	if (type==="radio") {
+		
+		 url = `${TIDAL_API_BASE_URL}/tracks/${trackId}/relationships/similarTracks`
+		 params = new URLSearchParams({
+			countryCode: COUNTRY_CODE,
+			include: "similarTracks"
+		});
+	}
+
+	else if (type==="album") {
+		
+		 url = `${TIDAL_API_BASE_URL}/tracks/${trackId}/relationships/albums`;
+		 params = new URLSearchParams({
+			countryCode: COUNTRY_CODE,
+			include: "albums"
+		});
+	}
+
 
 	const headers = {
 		"Authorization": `Bearer ${TIDAL_ACCESS_TOKEN}`
@@ -37,7 +54,37 @@ async function searchSimilarTracks(trackId) {
 			throw new Error(`Failed to fetch similar tracks: ${response.status}`);
 		}
 
-		const data = await response.json();
+		var data
+
+		if (type==="radio") {
+		 data = await response.json();
+		}
+
+		if (type === "album") {
+
+			var middata = await response.json();
+			console.log("album", middata)
+			// Fetch tracks for the album
+			const albumId = middata.data[0]?.id;
+			if (albumId) {
+			  const albumUrl = `${TIDAL_API_BASE_URL}/albums/${albumId}/relationships/items`;
+			  const albumParams = new URLSearchParams({
+				countryCode: COUNTRY_CODE,
+				include: "items"
+			  });
+	
+			  const albumResponse = await fetch(`${albumUrl}?${albumParams}`, { headers });
+	
+			  if (!albumResponse.ok) {
+				throw new Error(`Failed to fetch album tracks: ${albumResponse.status}`);
+			  }
+	
+			  data = await albumResponse.json();
+			} else {
+			  console.error("No album data found.");
+			  return;
+			}
+		  }
 		
 		// Extract similar track IDs
 		const trackIds = data.data.map(track => track.id);
@@ -68,7 +115,7 @@ useEffect(() => {
 	if (queueReady && data) {
 		data.forEach(trackId => {
 			// Queue each track
-			<AddToQueue refresh={refresh} setRefresh={setRefresh} key={trackId} trackId={trackId} type="auto" />;
+			<AddToQueue  key={trackId} trackId={trackId} type="auto" />;
 		});
 		setQueueReady(false); // Reset queue readiness
 		setData(null); // Clear data to prevent re-queuing
@@ -110,7 +157,7 @@ return (
 		
 			{data && queueReady ? (
 				data.map(trackId => (
-					<AddToQueue refresh={refresh} setRefresh={setRefresh} key={trackId} trackId={trackId} type="auto" />
+					<AddToQueue  key={trackId} trackId={trackId} type="auto" />
 				))
 			) : (
 				"" // Empty state or placeholder if needed

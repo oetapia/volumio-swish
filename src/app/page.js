@@ -18,7 +18,7 @@ export default function Home() {
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
-  console.log("from env",clientId,clientSecret)
+  //console.log("from env",clientId,clientSecret,token)
   
   const localhost = "http://volumio.local";
 

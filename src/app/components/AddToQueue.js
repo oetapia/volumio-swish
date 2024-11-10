@@ -37,10 +37,9 @@ function AddToQueue({ trackId, sourceUrl, type, variant }) {
 				}
 
 	            const json = await response.json();
-                console.log("Response from Volumio:", json);
+                //console.log("Response from Volumio:", json);
 
-                // Trigger refresh after successful queue addition
-                //setRefresh(!refresh);  // Use setRefresh to toggle refresh state
+           
                 
 				
 				// Optional: You can update the UI here if needed
