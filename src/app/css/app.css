@@ -196,6 +196,7 @@ body .editable-list .list-item {
 }
 body .editable-list .album-list {
   flex-grow: 1;
+  overflow: hidden;
 }
 body .album-container {
   position: relative;
@@ -348,6 +349,12 @@ body .album-list .meta .title {
   body input {
     font-size: 12pt;
   }
+  body .panel {
+    max-width: 95%;
+  }
+  body .search-panel {
+    order: 2;
+  }
   body .queue-panel {
     order: 3;
   }
@@ -358,9 +365,6 @@ body .album-list .meta .title {
   }
   body .album-art .cover {
     max-width: 12em;
-  }
-  body .panel {
-    width: 100%;
   }
   html {
     color-scheme: dark;

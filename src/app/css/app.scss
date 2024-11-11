@@ -259,6 +259,8 @@ body {
 		}
 		.album-list {
 			flex-grow: 1;
+			overflow: hidden;
+			//max-width: 100%;
 		}
 
 	
@@ -466,12 +468,16 @@ body {
 				//width: 70%;
 				font-size: 12pt;
 			}
+
+			.panel {
+				max-width: 95%;
+			}
 		
+			.search-panel {
+				order: 2;
+			}
 			.queue-panel {
 				order: 3;
-			}
-			.panel {
-				//width:90%;
 			}
 			.album-art {
 				max-width: 16em;
@@ -485,9 +491,6 @@ body {
 
 
 
-	.panel {
-		width: 100%;
-	}
 		}
 	
 		html {

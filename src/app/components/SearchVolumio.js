@@ -8,6 +8,7 @@ function SearchVolumio({ refresh, setRefresh }) {
 
     const [inputData, setInputData] = useState("");
     const [openPanel, setOpenPanel] = useState(false);
+    const [toggleSearch, setToggleSearch] = useState(false);
     const [albumArt, setAlbumArt] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -133,6 +134,36 @@ function SearchVolumio({ refresh, setRefresh }) {
                         }
                     }} 
                 />
+               
+                <button 
+                    className="toggle" 
+                    onClick={() => {
+                        setToggleSearch(!toggleSearch);
+                    }}
+                >
+                    
+                   {toggleSearch? <>
+                    <span className="badge">Local</span>
+                    <Image
+                        src="/icons/icon-toggle-on.svg"
+                        alt="Toggle"
+                        className="toggle-icon"
+                        width={24}
+                        height={24}
+                    />
+                   </>:
+                   <>
+                   <span className="badge">Stream</span>
+                    <Image
+                        src="/icons/icon-toggle-off.svg"
+                        alt="Toggle"
+                        className="toggle-icon"
+                        width={24}
+                        height={24}
+                    />
+                   </>
+                    }
+                </button>
                 <button 
                     className="btn-basic" 
                     disabled={!inputData} 
@@ -161,23 +192,7 @@ function SearchVolumio({ refresh, setRefresh }) {
                         height={16}
                     />
                 </button>
-                <button 
-                    className="toggle" 
-                    onClick={() => {
-                        setAlbumArt({});
-                        setInputData("");
-                        setOpenPanel(false);
-                    }}
-                >
-                    <span className="badge">Local</span>
-                    <Image
-                        src="/icons/icon-toggle-off.svg"
-                        alt="Toggle"
-                        className="toggle-icon"
-                        width={24}
-                        height={24}
-                    />
-                </button>
+      
             </div>
             
             <div className="search-results scroll-list">
