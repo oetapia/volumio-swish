@@ -5,6 +5,7 @@ import SearchVolumio from "./components/SearchVolumio";
 import TokenLogin from "./components/TokenLogin";
 import PlayingNow from "./components/PlayingNow";
 import QueueList from "./components/QueueList";
+import ToastMessages from "./components/ToastMessages";
 import WebSockets from './components/WebSockets';
 import DraggableDroppable from './components/DraggableDroppable';
 
@@ -14,12 +15,12 @@ export default function Home() {
   const [refresh, setRefresh] = useState(false)
   const [token, setToken] = useState(null);
   const [socketCommand, setSocketCommand] = useState(null);
+  const [message, setMessage] = useState(null);
   const [playingNow, setPlayingNow] = useState(null);
   const [responseState, setResponseState] = useState(null);
   const [responseQueue, setResponseQueue] = useState(null);
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
   const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
-  const [queueMove, setQueueMove] = useState(null)
 
   //console.log("from env",clientId,clientSecret,token)
 
@@ -27,6 +28,7 @@ export default function Home() {
 
   // Function to handle different player controls using WebSocket commands
   function volumioSocketCmd(command, value = null) {
+    
     switch (command) {
       case "play":
       case "pause":
@@ -68,6 +70,7 @@ export default function Home() {
       default:
         console.error("Unknown command");
     }
+    
   }
 
   return (
@@ -76,20 +79,24 @@ export default function Home() {
 <DraggableDroppable> </DraggableDroppable>
 
 
-      <TokenLogin ClientId={clientId} token={token} setToken={setToken} ClientSecret={clientSecret} ></TokenLogin>
+      <TokenLogin ClientId={clientId} token={token} setToken={setToken} ClientSecret={clientSecret} setMessage={setMessage} ></TokenLogin>
 
       <WebSockets
-        url="http://volumio.local"
+        url={localhost}
         socketCommand={socketCommand}
         setResponseState={setResponseState}
         setResponseQueue={setResponseQueue}
+        setMessage={setMessage}
       />
+
 
 
 
       <main className={"container"}>
 
-        <SearchVolumio refresh={refresh} localhost={localhost} setRefresh={setRefresh} />
+        <ToastMessages message={message}/>
+
+        <SearchVolumio setMessage={setMessage} refresh={refresh} localhost={localhost} setRefresh={setRefresh} />
 
 
 
@@ -101,6 +108,7 @@ export default function Home() {
           response={responseQueue}
           playingNow={playingNow}
           localhost={localhost}
+          setMessage={setMessage}
           volumioSocketCmd={volumioSocketCmd}
         />
         <PlayingNow
@@ -111,6 +119,7 @@ export default function Home() {
           localhost={localhost}
           volumioSocketCmd={volumioSocketCmd}
           response={responseState}
+          setMessage={setMessage}
         />
 
 

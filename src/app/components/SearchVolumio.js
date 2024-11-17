@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from "next/image";
 import AlbumArt from './AlbumArt';
 
-function SearchVolumio({ refresh, setRefresh, localhost }) {
+function SearchVolumio({ refresh, setRefresh, localhost, setMessage }) {
 
     const [inputData, setInputData] = useState("");
     const [openPanel, setOpenPanel] = useState(false);
@@ -30,6 +30,7 @@ function SearchVolumio({ refresh, setRefresh, localhost }) {
                     variant={variant} 
                     key={index} 
                     localhost={localhost}
+                    setMessage={setMessage}
                 />
             ));
         }
@@ -39,8 +40,10 @@ function SearchVolumio({ refresh, setRefresh, localhost }) {
     // Main function to handle search results
     async function searchTracks(searchTerm) {	
 
+        var message = 'Searching for:' + searchTerm;
+        setMessage(message)
         setLoading(true)
-        console.log('Searching for:', searchTerm);
+        console.log(message);
 
         const url = `http://volumio.local/api/v1/search?query=${encodeURIComponent(searchTerm)}`;
 
@@ -72,10 +75,12 @@ function SearchVolumio({ refresh, setRefresh, localhost }) {
                 // Update albumArt state with grouped components
                 setAlbumArt(newAlbumArt);
                 setLoading(false)
+                setMessage(null)
             } else {
                 console.log("No results found in the response.");
-                setAlbumArt("No results found in the response.");
+                setAlbumArt("");
                 setLoading(false)
+                setMessage("No results found in the response.")
             }
         } catch (error) {
             console.error("Error searching tracks:", error.message);
@@ -85,13 +90,7 @@ function SearchVolumio({ refresh, setRefresh, localhost }) {
     return (
         <div className={`panel search-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             
-            {
-                loading?
-                <p className="toast">
-                    Loading...
-                </p>    
-                :''
-            }
+     
 
             <div className="panel-control">
 
@@ -204,7 +203,15 @@ function SearchVolumio({ refresh, setRefresh, localhost }) {
             
             <div className="search-results scroll-list">
             <div className="search">
-               
+
+            {
+                loading?
+                <p>
+                    Loading...
+                </p>    
+                :''
+            }
+
                {toggleLocalSearch? 
               
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 
-function AddToQueue({ trackId, sourceUrl, type, variant, service }) {
+function AddToQueue({ trackId, sourceUrl, type, variant, service, setMessage, title, localhost }) {
 	// Set up a queue with an initial resolved promise
 
 
@@ -9,6 +9,8 @@ function AddToQueue({ trackId, sourceUrl, type, variant, service }) {
 
 	// This function adds each request to the queue
 	function queueTrackOnVolumio() {
+		var message = "Adding to queue: " + title;
+		setMessage(message)
 		queue = queue.then(async () => {
 			console.log('Adding track:', trackId || sourceUrl);
 
@@ -36,7 +38,7 @@ function AddToQueue({ trackId, sourceUrl, type, variant, service }) {
 
 	            const json = await response.json();
                 //console.log("Response from Volumio:", json);
-
+				setMessage(null)
            
                 
 				

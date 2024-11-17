@@ -3,7 +3,7 @@ import Image from "next/image";
 import SearchSimilar from "./SimilarToTidal";
 
 
-function ArtSingle({meta,  variant, service, token, localhost, setPlayingNow}) {
+function ArtSingle({meta,  variant, service, token, localhost, setPlayingNow, setMessage}) {
 
 const [albumArt, setalbumArt] = useState("")
 
@@ -109,8 +109,8 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 			  </p>
 			  {meta.service ==="tidal"?
 			  <>
-				<SearchSimilar service={meta.service}  type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-				<SearchSimilar service={meta.service} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar service={meta.service} setMessage={setMessage} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar service={meta.service} setMessage={setMessage} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
 			  </>
 				:''
 				}

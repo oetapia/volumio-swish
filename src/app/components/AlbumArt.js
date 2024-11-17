@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AddToQueue from './AddToQueue';
 
-function AlbumArt({meta, type, index, refresh, setRefresh, variant, token,playCommand, localhost}) {
+function AlbumArt({meta, type, index, refresh, setRefresh, variant,localhost, setMessage}) {
 
 	const [albumArt, setalbumArt] = useState("")
 
@@ -58,7 +58,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   if (type==="search"){
 
 	  return (
-		<li className={"album-list"} key={meta.uri} >
+		<li className={"album-list"} key={meta.uri+index} >
 	
 			<div className="album-container">
 
@@ -108,7 +108,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 
 				
 			</div>
-			  <AddToQueue sourceUrl={meta.uri} service={meta.service} refresh={refresh} variant={variant} setRefresh={setRefresh} ></AddToQueue>
+			  <AddToQueue title={meta.name||meta.title} setMessage={setMessage} sourceUrl={meta.uri} service={meta.service} refresh={refresh} variant={variant} setRefresh={setRefresh} ></AddToQueue>
 	
 		</li>
 	

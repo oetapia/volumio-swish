@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue }) => {
+const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue, setMessage }) => {
   const [socket, setSocket] = useState(null);
   
   useEffect(() => {
@@ -44,6 +44,7 @@ const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue }) 
 
   // Send command when socketCommand changes
   useEffect(() => {
+    setMessage(JSON.stringify(socketCommand))
     if (socket && socketCommand) {
       if (typeof socketCommand === 'object') {
         if (socketCommand.command === "moveQueue") {
@@ -53,7 +54,9 @@ const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue }) 
           socket.emit(socketCommand.command, socketCommand.value);
         }
       } else {
+        
         socket.emit(socketCommand);
+        setMessage(null)
       }
       console.log(`Sent command: ${JSON.stringify(socketCommand)}`);
     }

@@ -115,8 +115,8 @@ body .progress-fill {
 }
 body .toast {
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0;
+  right: 1em;
   font-size: 0.75em;
   color: #222223;
 }
