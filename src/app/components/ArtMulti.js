@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import PlayFromQueue from './PlayFromQueue';
 
 function ArtMulti({meta,  index, variant, volumioSocketCmd, localhost}) {
 
-
+	const [albumArt, setalbumArt] = useState("")
 
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
 
@@ -17,6 +17,41 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   }
 
  
+  function checkArt(source) {
+
+	//console.log("source",source)
+	var structure	
+
+	if (source && source.includes("/albumart?")) {
+
+	structure = <img
+	className={`cover ${variant}`}
+	src={localhost+source || defaultImageUrl} // Use meta.image or fallback
+	onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+	alt={meta.title || "Default Album Art"}
+/>
+
+	}
+
+	else {
+
+		structure = <img
+		className={`cover ${variant}`}
+		src={source || defaultImageUrl} // Use meta.image or fallback
+		onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+		alt={meta.title || "Default Album Art"}
+	/>
+
+	}
+
+	
+	return setalbumArt(structure)
+  }
+
+  useEffect(() => {
+	checkArt(meta.albumart)
+  
+  }, [meta])
   
 
 
@@ -25,19 +60,14 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	  <div className={"album-list"} key={meta.uri} >
   
 		  <div className="album-container">
-		 	 <img
-					className={`cover ${variant}`}
-					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
-					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-					alt={meta.title || "Default Album Art"}
-				/>
+		  		{albumArt}
 				<PlayFromQueue index={index} localhost={localhost}></PlayFromQueue>
 		  </div>
   
 		  <div className="meta">
 			  <p className="primary">
 				  <span className="title">
-				  {meta.title}
+				  {meta.title?meta.title:meta.name}
 				  </span>
 			  </p>
 			  <p className="secondary">

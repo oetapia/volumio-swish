@@ -1,12 +1,11 @@
 "use client"
 
 import React, { useState, useEffect, use } from 'react';
-import AlbumArt from './ArtMulti';
 import Image from "next/image";
 import RemoveFromQueue from './RemoveFromQueue';
-import DraggableList from "./DraggableList";
+import DraggableList from "./DraggableDroppable";
 
-function QueueList({ response, token, volumioSocketCmd, localhost, onMove }) {
+function QueueList({ response, token, volumioSocketCmd, localhost, onMove,playingNow }) {
   const [openPanel, setOpenPanel] = useState(true);
   const [items, setItems] = useState(response);
   const [editable, setEditable] = useState(false);
@@ -24,6 +23,8 @@ function QueueList({ response, token, volumioSocketCmd, localhost, onMove }) {
   return (
     <div className={`panel queue-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
       <div className="panel-control">     
+
+        
         
         <button 
           className="button-open"
@@ -47,14 +48,10 @@ function QueueList({ response, token, volumioSocketCmd, localhost, onMove }) {
           className="editable"
           onClick={() => setEditable(!editable)}
         >
-      {/*     {editable ? (
-            <Image src="/icons/icon-edit.svg" alt="Toggle" className="toggle-panel" width={18} height={18} />
-          ) : (
-            <Image src="/icons/icon-edit.svg" alt="Toggle" className="toggle-panel" width={18} height={18} />
-          )} */}
+
         </button>
           <div className={`queue queue-list scroll-list `}>
-          <DraggableList onMove={onMove} items={items} editable={editable} setItems={setItems} localhost={localhost} volumioSocketCmd={volumioSocketCmd} token={token}/>
+          <DraggableList onMove={onMove} items={items} editable={editable} setItems={setItems} localhost={localhost} volumioSocketCmd={volumioSocketCmd} token={token} playingNow={playingNow}/>
            
           </div>
         

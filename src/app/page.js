@@ -6,12 +6,15 @@ import TokenLogin from "./components/TokenLogin";
 import PlayingNow from "./components/PlayingNow";
 import QueueList from "./components/QueueList";
 import WebSockets from './components/WebSockets';
+import DraggableDroppable from './components/DraggableDroppable';
+
 
 export default function Home() {
 
   const [refresh, setRefresh] = useState(false)
   const [token, setToken] = useState(null);
   const [socketCommand, setSocketCommand] = useState(null);
+  const [playingNow, setPlayingNow] = useState(null);
   const [responseState, setResponseState] = useState(null);
   const [responseQueue, setResponseQueue] = useState(null);
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -70,6 +73,8 @@ export default function Home() {
   return (
     <div className={"whole"}>
 
+<DraggableDroppable> </DraggableDroppable>
+
 
       <TokenLogin ClientId={clientId} token={token} setToken={setToken} ClientSecret={clientSecret} ></TokenLogin>
 
@@ -84,7 +89,7 @@ export default function Home() {
 
       <main className={"container"}>
 
-        <SearchVolumio refresh={refresh} setRefresh={setRefresh} />
+        <SearchVolumio refresh={refresh} localhost={localhost} setRefresh={setRefresh} />
 
 
 
@@ -94,6 +99,7 @@ export default function Home() {
           setRefresh={setRefresh}
           token={token}
           response={responseQueue}
+          playingNow={playingNow}
           localhost={localhost}
           volumioSocketCmd={volumioSocketCmd}
         />
@@ -101,6 +107,7 @@ export default function Home() {
           refresh={refresh}
           setRefresh={setRefresh}
           token={token}
+          setPlayingNow={setPlayingNow}
           localhost={localhost}
           volumioSocketCmd={volumioSocketCmd}
           response={responseState}

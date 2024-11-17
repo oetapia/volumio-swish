@@ -4,11 +4,11 @@ import { useState } from 'react';
 import Image from "next/image";
 import AlbumArt from './AlbumArt';
 
-function SearchVolumio({ refresh, setRefresh }) {
+function SearchVolumio({ refresh, setRefresh, localhost }) {
 
     const [inputData, setInputData] = useState("");
     const [openPanel, setOpenPanel] = useState(false);
-    const [toggleSearch, setToggleSearch] = useState(false);
+    const [toggleLocalSearch, setToggleLocalSearch] = useState(false);
     const [albumArt, setAlbumArt] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -29,6 +29,7 @@ function SearchVolumio({ refresh, setRefresh }) {
                     type="search" 
                     variant={variant} 
                     key={index} 
+                    localhost={localhost}
                 />
             ));
         }
@@ -56,6 +57,12 @@ function SearchVolumio({ refresh, setRefresh }) {
             if (json && json.navigation && json.navigation.lists) {
                 const newAlbumArt = {};
 
+                // Process "TIDAL Tracks" and "TIDAL Playlist" lists
+                   newAlbumArt.local_tracks = processList(json, "Tracks '", "tracks", 9);
+                // Process "TIDAL Tracks" and "TIDAL Playlist" lists
+                   newAlbumArt.local_albums = processList(json, "Albums '", "albums", 6);
+                // Process "TIDAL Tracks" and "TIDAL Playlist" lists
+                   newAlbumArt.youtube = processList(json, "Youtube '", "tracks", 9);
                 // Process "TIDAL Tracks" and "TIDAL Playlist" lists
                 newAlbumArt.tracks = processList(json, "TIDAL Tracks", "tracks", 9);
                 newAlbumArt.playlists = processList(json, "TIDAL Playlist", "playlist", 3);
@@ -138,11 +145,11 @@ function SearchVolumio({ refresh, setRefresh }) {
                 <button 
                     className="toggle" 
                     onClick={() => {
-                        setToggleSearch(!toggleSearch);
+                        setToggleLocalSearch(!toggleLocalSearch);
                     }}
                 >
                     
-                   {toggleSearch? <>
+                   {toggleLocalSearch? <>
                     <span className="badge">Local</span>
                     <Image
                         src="/icons/icon-toggle-on.svg"
@@ -197,39 +204,87 @@ function SearchVolumio({ refresh, setRefresh }) {
             
             <div className="search-results scroll-list">
             <div className="search">
-                {albumArt.tracks && (
-                    <div className="tracks">
-                        <h3>Tidal Tracks</h3>
-                        <ul className="queue-list">
-                            {albumArt.tracks}
-                        </ul>
-                    </div>
-                )}
-                {albumArt.artists && (
-                    <div className="artists">
-                        <h3>Tidal Artists</h3>
-                        <ul className="queue-list">
-                            {albumArt.artists}
-                        </ul>
-                    </div>
-                )}
-                {albumArt.albums && (
-                    <div className="albums">
-                        <h3>Tidal Albums</h3>
-                        <ul className="queue-list">
-                            {albumArt.albums}
-                        </ul>
-                    </div>
-                )}
+               
+               {toggleLocalSearch? 
               
-                {albumArt.playlists && (
-                    <div className="playlist">
-                        <h3>Tidal Playlists</h3>
-                        <ul className="queue-list">
-                            {albumArt.playlists}
-                        </ul>
-                    </div>
-                )}
+
+    (<>
+        {albumArt.local_tracks && (
+         <div className="tracks">
+             <h3>Local Tracks</h3>
+             <ul className="queue-list">
+                 {albumArt.local_tracks}
+             </ul>
+         </div>
+     )}
+ {albumArt.local_albums && (
+         <div className="albums">
+             <h3>Local Albums</h3>
+             <ul className="queue-list">
+                 {albumArt.local_albums}
+             </ul>
+         </div>
+     )}
+    </>
+
+    )
+
+    :
+
+    (
+        <>
+         {albumArt.tracks && (
+          <div className="tracks">
+              <h3>Tidal Tracks</h3>
+              <ul className="queue-list">
+                  {albumArt.tracks}
+              </ul>
+          </div>
+      )}
+      {albumArt.artists && (
+          <div className="artists">
+              <h3>Tidal Artists</h3>
+              <ul className="queue-list">
+                  {albumArt.artists}
+              </ul>
+          </div>
+      )}
+      {albumArt.albums && (
+          <div className="albums">
+              <h3>Tidal Albums</h3>
+              <ul className="queue-list">
+                  {albumArt.albums}
+              </ul>
+          </div>
+      )}
+    
+      {albumArt.playlists && (
+          <div className="playlist">
+              <h3>Tidal Playlists</h3>
+              <ul className="queue-list">
+                  {albumArt.playlists}
+              </ul>
+          </div>
+      )}
+       {albumArt.youtube && (
+          <div className="playlist">
+              <h3>Youtube</h3>
+              <ul className="queue-list">
+                  {albumArt.youtube}
+              </ul>
+          </div>
+      )}
+        
+        </>
+       )
+      
+      
+      
+
+               
+               }
+              
+         
                 </div>
             </div>
             </div>

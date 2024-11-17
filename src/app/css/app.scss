@@ -294,18 +294,33 @@ body {
 		border-radius: 0.3em;
 	}
 
+
 	.toggle {
 		font-size: 0.8em;
+		height: 1em;
 		position: relative;
+		width: 3.6em;
 		.badge {
 			position: absolute;
-			top: 1em;
-			left: 0.7em;
+			top: 0.2em;
+			left: 0.1em;
 		}
 		.toggle-icon {
 			top:1.4em;
 			position: absolute;
     		left: 0.7em;
+		}
+	}
+
+	.played {
+		opacity: .5;
+	}
+	
+
+	.playing {
+		.album-list {
+			border: 1px solid lighten($highlight,10%);
+			background-color: lighten($dark, 1%);
 		}
 	}
 

@@ -1,26 +1,13 @@
-import React from 'react'
-import Image from "next/image";
+import React, { useEffect, useState } from 'react'
 import AddToQueue from './AddToQueue';
-import SearchSimilar from "./SimilarToTidal";
-import RemoveFromQueue from './RemoveFromQueue';
 
-function AlbumArt({meta, type, index, refresh, setRefresh, variant, token,playCommand}) {
+function AlbumArt({meta, type, index, refresh, setRefresh, variant, token,playCommand, localhost}) {
 
-
+	const [albumArt, setalbumArt] = useState("")
 
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
 
 	
-
-  function extractIdFromURL(uri) {
-
-	//console.log('processing',uri) 
-  
-	var processed = uri.replace("tidal://song/",'')
-  
-	return processed
-  
-	}
 
   function formatDuration(duration) {
 	const minutes = Math.floor(duration / 60);
@@ -28,28 +15,45 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	return `${minutes}:${seconds.toString().padStart(2, '0')}`; // Ensures two digits for seconds
   }
 
-  async function playItem(id) {
 
-	console.log('play',id)
 
-	var url = "http://volumio.local/api/v1/commands/?cmd=play&N="+id
+  function checkArt(source) {
 
-	try {
-		const response = await fetch(url);
-		if (!response.ok) {
-		  throw new Error(`Response status: ${response.status}`);
-		}
-	
-		const json = await response.json();
-  
-		console.log(json)
-		
-		setRefresh(!refresh)
-  
-	  } catch (error) {
-		console.error(error.message);
-	  }
+	console.log("source",source,localhost)
+	var structure	
+
+	if (source && source.includes("/albumart?")) {
+
+	structure = <img
+	className={`cover ${variant}`}
+	src={localhost+source || defaultImageUrl} // Use meta.image or fallback
+	onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+	alt={meta.title || "Default Album Art"}
+/>
+
+	}
+
+	else {
+
+		structure = <img
+		className={`cover ${variant}`}
+		src={source || defaultImageUrl} // Use meta.image or fallback
+		onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+		alt={meta.title || "Default Album Art"}
+	/>
+
+	}
+
+	return setalbumArt(structure)
   }
+
+  useEffect(() => {
+	checkArt(meta.albumart)
+  
+  }, [meta])
+  
+  
+
 
   if (type==="search"){
 
@@ -58,21 +62,17 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	
 			<div className="album-container">
 
-				<img
-					className={`cover ${variant}`}
-					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
-					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-					alt={meta.title || "Default Album Art"}
-				/>
+			{albumArt}
 		
 			</div>
 	
 			<div className="meta">
 				<p className="primary">
 					<span className="title">
-					{meta.title}
+					{meta.title?meta.title:meta.name}
 					</span>
 				</p>
+				
 				<p className="secondary">
 				<span className="artist">
 					{meta.artist}
@@ -108,125 +108,14 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 
 				
 			</div>
-			  <AddToQueue sourceUrl={meta.uri} refresh={refresh} variant={variant} setRefresh={setRefresh} ></AddToQueue>
+			  <AddToQueue sourceUrl={meta.uri} service={meta.service} refresh={refresh} variant={variant} setRefresh={setRefresh} ></AddToQueue>
 	
 		</li>
 	
 	  )
   }
 
-  if (type==="small"){
-
-	return (
-	  <li className={"album-list"} key={meta.uri} >
-  
-		  <div className="album-container">
-		 	 <img
-					className={`cover ${variant}`}
-					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
-					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-					alt={meta.title || "Default Album Art"}
-				/>
-			  {playCommand}
-		  </div>
-  
-		  <div className="meta">
-			  <p className="primary">
-				  <span className="title">
-				  {meta.title}
-				  </span>
-			  </p>
-			  <p className="secondary">
-				<span className="artist">
-					{meta.artist}
-				</span>
-				</p>
-				<p className="secondary">
-				<span className="album">
-					{meta.album}
-				</span> 
-				</p>
-			  <p className="extra">
-				<span className="item">
-					{meta.trackType}
-				</span>
-				{meta.samplerate?
-				<span className="item">
-					{meta.samplerate}
-				</span>:''
-				}
-				<span className="item">
-					{formatDuration(meta.duration)}
-				</span>
-				
-			</p>
-
-		
-		  </div>
-			<RemoveFromQueue sourceUrl={meta.uri} refresh={refresh} setRefresh={setRefresh} ></RemoveFromQueue>
-		
-	  </li>
-  
-	)
-}
-
-  else {
-
-	return (
-	  <div className={"album-art"}>
-  
- 			 <img
-					className={`cover ${variant}`}
-					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
-					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-					alt={meta.title || "Default Album Art"}
-				/>
-  
-		  <div className="meta">
-			  <p className="primary">
-				  <span className="title">
-				  {meta.title}
-				  </span>
-			  </p>
-			  <p className="secondary">
-			  <span className="artist">
-				  {meta.artist}
-			  </span>
-			  &nbsp; - &nbsp;
-			  <span className="album">
-				  {meta.album}
-			  </span> 
-			  </p>
-			  <p className="extra">
-			  {meta.trackType?
-				  <span className="item">
-					  {meta.trackType}
-				  </span>
-				  :""}
-				  {meta.samplerate? 
-				  <span className="item">
-					  {meta.samplerate}
-				  </span> : 
-				  ""}
-				  
-				  <span className="item">
-				  	{formatDuration(meta.duration)}
-				  </span>
-			
-			  </p>
-			  {meta.uri?
-			  <>
-				<SearchSimilar refresh={refresh} setRefresh={setRefresh} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-				<SearchSimilar refresh={refresh} setRefresh={setRefresh} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-			  </>
-				:''
-				}
-		  </div>
-  
-	  </div>
-  
-	)
-}
+ 
 }
 
 export default AlbumArt

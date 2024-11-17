@@ -1,11 +1,9 @@
 import React from 'react';
 import Image from "next/image";
 
-function AddToQueue({ trackId, sourceUrl, type, variant }) {
+function AddToQueue({ trackId, sourceUrl, type, variant, service }) {
 	// Set up a queue with an initial resolved promise
 
-
-	
 
 	let queue = Promise.resolve();
 
@@ -16,7 +14,7 @@ function AddToQueue({ trackId, sourceUrl, type, variant }) {
 
 			const url = "http://volumio.local/api/v1/addToQueue";
 			const data = {
-				"service": "tidal",
+				"service": service? service:"mpd",
 				"uri": sourceUrl ? sourceUrl : `tidal://song/${trackId}`
 			};
 

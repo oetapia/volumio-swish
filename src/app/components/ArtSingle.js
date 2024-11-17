@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import SearchSimilar from "./SimilarToTidal";
 
 
-function ArtSingle({meta,  variant, token}) {
+function ArtSingle({meta,  variant, service, token, localhost, setPlayingNow}) {
 
+const [albumArt, setalbumArt] = useState("")
+
+console.log(service,meta)
 
 
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
@@ -21,23 +24,56 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   
 	}
 
+	
+
   function formatDuration(duration) {
 	const minutes = Math.floor(duration / 60);
 	const seconds = duration % 60;
 	return `${minutes}:${seconds.toString().padStart(2, '0')}`; // Ensures two digits for seconds
   }
 
+  function checkArt(source) {
 
+	//console.log("source",source)
+	var structure	
+
+	if (source && source.includes("/albumart?")) {
+
+	structure = <img
+	className={`cover ${variant}`}
+	src={localhost+source || defaultImageUrl} // Use meta.image or fallback
+	onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+	alt={meta.title || "Default Album Art"}
+/>
+
+	}
+
+	else {
+
+		structure = <img
+		className={`cover ${variant}`}
+		src={source || defaultImageUrl} // Use meta.image or fallback
+		onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
+		alt={meta.title || "Default Album Art"}
+	/>
+
+	}
+
+	
+	return setalbumArt(structure)
+  }
+
+  useEffect(() => {
+	checkArt(meta.albumart)
+	setPlayingNow(meta.position)
+  
+  }, [meta])
+  
 
 	return (
 	  <div className={"album-art"}>
   
- 			 <img
-					className={`cover ${variant}`}
-					src={meta.albumart || defaultImageUrl} // Use meta.image or fallback
-					onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-					alt={meta.title || "Default Album Art"}
-				/>
+		{albumArt}
   
 		  <div className="meta">
 			  <p className="primary">
@@ -71,10 +107,10 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 				  </span>
 			
 			  </p>
-			  {meta.uri?
+			  {meta.service ==="tidal"?
 			  <>
-				<SearchSimilar  type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-				<SearchSimilar  type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar service={meta.service}  type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar service={meta.service} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
 			  </>
 				:''
 				}

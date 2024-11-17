@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ArtSingle from './ArtSingle';
 import Image from "next/image";
 
-function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd }) {
+function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow }) {
   
   const [openPanel, setOpenPanel] = useState(true);
 
@@ -35,7 +35,7 @@ function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd })
       <div className="contained">
         {response && (
           <>
-            <ArtSingle meta={response} refresh={refresh} setRefresh={setRefresh} token={token} variant="single" />
+            <ArtSingle meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} />
             <div className="volume-buttons">
             {response.mute?
             <button onClick={() => volumioSocketCmd("unmute")}>
