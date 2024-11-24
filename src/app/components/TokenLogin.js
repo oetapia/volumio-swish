@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
+function TokenLogin({ ClientId, ClientSecret,setToken, source, service, setMessage}) {
   
 
   // Helper function to base64 encode client credentials
@@ -11,9 +11,12 @@ function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
   };
 
   const getToken = async () => {
+
+    setMessage("Loading Token")
+
     try {
       const creds = encodeCredentials(ClientId, ClientSecret);
-      const response = await fetch('https://auth.tidal.com/v1/oauth2/token', {
+      const response = await fetch(source, {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${creds}`,
@@ -32,8 +35,9 @@ function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
         };
 
         // Store token data in localStorage
-        localStorage.setItem('authToken', JSON.stringify(tokenData));
+        localStorage.setItem('authToken'+service, JSON.stringify(tokenData));
         setToken(tokenData.token);
+        setMessage("")
       } else {
         console.error('Failed to fetch token:', data);
       }
@@ -43,7 +47,7 @@ function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
   };
 
   const checkToken = () => {
-    const storedToken = localStorage.getItem('authToken');
+    const storedToken = localStorage.getItem('authToken'+service);
 
 	console.log("stored",storedToken)
 
@@ -67,11 +71,7 @@ function TokenLogin({ ClientId, ClientSecret,setToken, token }) {
     checkToken();
   }, []);
 
-  return (
-    <div className="overlay toast">
-      {token ? "" : <p className="active">Loading</p>}
-    </div>
-  );
+
 }
 
 export default TokenLogin;

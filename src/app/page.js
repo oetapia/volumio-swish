@@ -7,6 +7,7 @@ import PlayingNow from "./components/PlayingNow";
 import QueueList from "./components/QueueList";
 import ToastMessages from "./components/ToastMessages";
 import WebSockets from './components/WebSockets';
+
 import DraggableDroppable from './components/DraggableDroppable';
 
 
@@ -14,17 +15,22 @@ export default function Home() {
 
   const [refresh, setRefresh] = useState(false)
   const [token, setToken] = useState(null);
+  const [g_token, setGToken] = useState(null);
   const [socketCommand, setSocketCommand] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [message, setMessage] = useState(null);
   const [playingNow, setPlayingNow] = useState(null);
   const [responseState, setResponseState] = useState(null);
   const [responseQueue, setResponseQueue] = useState(null);
-  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-  const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+  const clientIdTidal = process.env.NEXT_PUBLIC_CLIENT_ID_TIDAL;
+  const clientSecretTidal = process.env.NEXT_PUBLIC_CLIENT_SECRET_TIDAL;
+
 
   //console.log("from env",clientId,clientSecret,token)
 
   const localhost = "http://volumio.local";
+  const localAPI = "http://localhost:4000";
+  //var g_token = "hHY3vXOwzS0PZCJib3l2Td7vlyHgKvp7xAQiZZnCz1BBSL3B3WAjw1QPRe5U6U6D"
 
   // Function to handle different player controls using WebSocket commands
   function volumioSocketCmd(command, value = null) {
@@ -58,6 +64,13 @@ export default function Home() {
       case "getState":
         setSocketCommand(command);
         break;
+      case "addToFavourites":
+        setSocketCommand({ command: "addToFavourites",  value: {
+          uri: value.uri,
+          title: value.title,
+          service: value.service,
+      }, });
+        break;
       case "removeFromQueue":
         setSocketCommand({ command: "removeFromQueue", value: value });
         break;
@@ -76,10 +89,11 @@ export default function Home() {
   return (
     <div className={"whole"}>
 
-<DraggableDroppable> </DraggableDroppable>
+      <DraggableDroppable> </DraggableDroppable>
 
-
-      <TokenLogin ClientId={clientId} token={token} setToken={setToken} ClientSecret={clientSecret} setMessage={setMessage} ></TokenLogin>
+      <TokenLogin ClientId={clientIdTidal} setToken={setToken} ClientSecret={clientSecretTidal} service={"tidal"} source={"https://auth.tidal.com/v1/oauth2/token"} setMessage={setMessage} ></TokenLogin>
+  
+     
 
       <WebSockets
         url={localhost}
@@ -96,7 +110,7 @@ export default function Home() {
 
         <ToastMessages message={message}/>
 
-        <SearchVolumio setMessage={setMessage} refresh={refresh} localhost={localhost} setRefresh={setRefresh} />
+        <SearchVolumio setMessage={setMessage} refresh={refresh} localhost={localhost} setRefresh={setRefresh} searchTerm={searchTerm} />
 
 
 
@@ -111,7 +125,11 @@ export default function Home() {
           setMessage={setMessage}
           volumioSocketCmd={volumioSocketCmd}
         />
+        
+      
+
         <PlayingNow
+          g_token={g_token}
           refresh={refresh}
           setRefresh={setRefresh}
           token={token}
@@ -120,6 +138,8 @@ export default function Home() {
           volumioSocketCmd={volumioSocketCmd}
           response={responseState}
           setMessage={setMessage}
+          localAPI={localAPI}
+          setSearchTerm={setSearchTerm}
         />
 
 

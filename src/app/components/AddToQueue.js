@@ -9,12 +9,13 @@ function AddToQueue({ trackId, sourceUrl, type, variant, service, setMessage, ti
 
 	// This function adds each request to the queue
 	function queueTrackOnVolumio() {
-		var message = "Adding to queue: " + title;
-		setMessage(message)
-		queue = queue.then(async () => {
-			console.log('Adding track:', trackId || sourceUrl);
 
-			const url = "http://volumio.local/api/v1/addToQueue";
+		
+		queue = queue.then(async () => {
+			var message = "Adding to queue: " + title;
+			console.log('Adding track:', trackId || sourceUrl);
+			setMessage(message)
+			const url = localhost+"/api/v1/addToQueue";
 			const data = {
 				"service": service? service:"mpd",
 				"uri": sourceUrl ? sourceUrl : `tidal://song/${trackId}`

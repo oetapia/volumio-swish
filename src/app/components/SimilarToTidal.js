@@ -5,7 +5,7 @@ import Image from "next/image";
 import AddToQueue from './AddToQueue';
 
 
-function SearchTidal({passedId,  token, type, service, setMessage}) {
+function SearchTidal({passedId,  token, type, service, setMessage, localhost}) {
 	
 
 const [data, setData] = useState(null)
@@ -115,7 +115,7 @@ useEffect(() => {
 	if (queueReady && data) {
 		data.forEach(trackId => {
 			// Queue each track
-			<AddToQueue setMessage={setMessage} title="Similar" service={service}  key={trackId} trackId={trackId} type="auto" />;
+			<AddToQueue localhost={localhost} setMessage={setMessage} title="Similar" service={service}  key={trackId} trackId={trackId} type="auto" />;
 		});
 		setQueueReady(false); // Reset queue readiness
 		setData(null); // Clear data to prevent re-queuing
@@ -157,7 +157,7 @@ return (
 		
 			{data && queueReady ? (
 				data.map(trackId => (
-					<AddToQueue title={type} setMessage={setMessage} service={service} key={trackId} trackId={trackId} type="auto" />
+					<AddToQueue localhost={localhost} title={type} setMessage={setMessage} service={service} key={trackId} trackId={trackId} type="auto" />
 				))
 			) : (
 				"" // Empty state or placeholder if needed

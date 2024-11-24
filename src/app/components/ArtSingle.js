@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import SearchSimilar from "./SimilarToTidal";
+import GeniusMetadata from './GeniusMetadata';
 
-
-function ArtSingle({meta,  variant, service, token, localhost, setPlayingNow, setMessage}) {
+function ArtSingle({meta,  variant, service, token, g_token, localhost, setPlayingNow, setMessage, localAPI, setSearchTerm}) {
 
 const [albumArt, setalbumArt] = useState("")
+const [extraInfo, setExtraInfo] = useState(false)
 
 console.log(service,meta)
 
@@ -66,14 +67,34 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   useEffect(() => {
 	checkArt(meta.albumart)
 	setPlayingNow(meta.position)
-  
+	setExtraInfo(false)
   }, [meta])
   
 
 	return (
-	  <div className={"album-art"}>
+		<>
+
+{
+		extraInfo?
+		<GeniusMetadata
+         setMessage={setMessage}
+         meta={meta}
+         g_token={g_token}
+		 localAPI={localAPI}
+		 setSearchTerm={setSearchTerm}
+         />
+		:""
+		}
   
-		{albumArt}
+	  <div className={"album-art"}>
+
+		
+	  {
+		extraInfo?
+		""
+		:albumArt
+		}
+		
   
 		  <div className="meta">
 			  <p className="primary">
@@ -109,14 +130,39 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 			  </p>
 			  {meta.service ==="tidal"?
 			  <>
-				<SearchSimilar service={meta.service} setMessage={setMessage} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-				<SearchSimilar service={meta.service} setMessage={setMessage} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar localhost={localhost} service={meta.service} setMessage={setMessage} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+				<SearchSimilar service={meta.service} localhost={localhost} setMessage={setMessage} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+
+
 			  </>
 				:''
 				}
+
+<button 
+				className=' btn btn-basic' 
+				onClick={()=>setExtraInfo(!extraInfo)}
+				title="Find Samples"
+				>{extraInfo?
+				<Image
+				src="/icons/icon-close.svg"
+				alt="Close"
+				className="action"
+				width={16}
+				height={16}
+				/>:
+				<Image
+					src="/icons/icon-author-search.svg"
+					alt="Search samples"
+					className="action"
+					width={16}
+					height={16}
+				/>
+				}</button>
+				
 		  </div>
   
 	  </div>
+		</>
   
 	)
 }

@@ -239,6 +239,12 @@ body .playing .album-list {
   border: 1px solid rgba(97, 97, 73, 0.4);
   background-color: #252526;
 }
+body .samples {
+  font-size: 0.9em;
+  height: 48vh;
+  max-height: 48vh;
+  text-align: left;
+}
 body .album-list {
   border: 1px solid rgba(68, 68, 51, 0.4);
   box-shadow: 0.1em 0.1em 0.3em rgba(17, 17, 34, 0.5333333333);
@@ -280,6 +286,12 @@ body .album-list .cover.artists {
   height: 4em; /* Set a fixed height to keep it square */
   overflow: hidden;
 }
+body .album-list .cover.search {
+  width: 3em;
+  border-radius: 0.2em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 body .album-list .meta {
   flex: 1; /* Allows the description to take up the remaining space */
 }
@@ -301,6 +313,7 @@ body .album-list .meta .title {
 .album-art {
   padding: 1em;
   flex: 1;
+  position: relative;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -320,9 +333,6 @@ body .album-list .meta .title {
   border-radius: 1em;
   margin: 0.6em 0.3em;
   max-height: 45vh;
-}
-.album-art .meta {
-  padding: 0 1em;
 }
 .album-art .meta .secondary {
   font-size: 0.8em;
@@ -372,7 +382,7 @@ body .album-list .meta .title {
     width: 16em;
     text-align: center;
   }
-  body .album-art .cover {
+  body .album-art .cover.single {
     max-width: 12em;
   }
   html {

@@ -324,6 +324,14 @@ body {
 		}
 	}
 
+	.samples {
+		font-size: .9em;
+		//max-width: 45vh;
+		height: 48vh;
+		max-height: 48vh;
+		text-align: left;
+	}
+
 	.album-list {
 		border: 1px solid $highlight;
 		box-shadow: 0.1em 0.1em 0.3em $shadow;
@@ -365,6 +373,12 @@ body {
 				height: 4em;          /* Set a fixed height to keep it square */
 				overflow: hidden;  
 			}
+			&.search {
+				width: 3em;
+				border-radius: 0.2em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 			height: auto; /* Keep aspect ratio */
 			object-fit: cover; /* Ensures the image doesn’t get distorted */
 		}
@@ -399,6 +413,7 @@ body {
 	.album-art {
 		padding: 1em;
 		flex: 1;
+		position: relative;
 		//max-width: 24em;
 		//width: 24em;
 		width: 100%;
@@ -428,7 +443,7 @@ body {
 		}
 		.meta {
 		
-			padding: 0 1em;
+			//padding: 0 1em;
 			
 			.secondary {
 				font-size: 0.8em;
@@ -498,7 +513,7 @@ body {
 				max-width: 16em;
 				width: 16em;
 				text-align: center;
-				.cover {
+				.cover.single {
 					max-width: 12em;
 				}
 			}

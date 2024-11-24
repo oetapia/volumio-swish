@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import AddToQueue from './AddToQueue';
+import Image from "next/image";
 
-function AlbumArt({meta, type, index, refresh, setRefresh, variant,localhost, setMessage}) {
+function AlbumArt({meta, type, index, refresh, setRefresh, variant,localhost, setMessage, setSearchTerm}) {
 
 	const [albumArt, setalbumArt] = useState("")
 
@@ -48,14 +48,11 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   }
 
   useEffect(() => {
-	checkArt(meta.albumart)
+	checkArt(meta.header_image_thumbnail_url)
   
   }, [meta])
   
   
-
-
-  if (type==="search"){
 
 	  return (
 		<li className={"album-list"} key={meta.uri+index} >
@@ -75,7 +72,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 				
 				<p className="secondary">
 				<span className="artist">
-					{meta.artist}
+					{meta.artist_names}
 				</span>
 				</p>
 				<p className="secondary">
@@ -84,31 +81,42 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 				</span> 
 				</p>
 				<p className="extra">
-				{
-					meta.trackType ?
-					<span className="item">
-					  {meta.trackType}
-				  </span>:''
-				}
 				  
-				  {meta.samplerate?
+				  {meta.release_date_for_display?
 				  <span className="item">
-					  {meta.samplerate}
+					  {meta.release_date_for_display}
 				  </span>:''
 				  }
 
 				{
-				meta.duration?
+				meta.id?
 				<span className="item">
-					  {formatDuration(meta.duration)}
+					  {formatDuration(meta.id)}
 				  </span>:''
 				}
 				  
 			  </p>
 
+
 				
 			</div>
-			  <AddToQueue localhost={localhost} title={meta.name||meta.title} setMessage={setMessage} sourceUrl={meta.uri} service={meta.service} refresh={refresh} variant={variant} setRefresh={setRefresh} ></AddToQueue>
+			  
+<button 
+				className="btn-basic" 
+				title={" from track"}
+				onClick={()=>setSearchTerm(meta.artist_names+" "+meta.title)} // Use handler to initiate fetch
+			>
+				
+				<Image
+					src="/icons/icon-search.svg"
+					alt="Track from Radio"
+					className="action"
+					width={16}
+					height={16}
+				/>
+				
+				
+			</button>
 	
 		</li>
 	
@@ -116,6 +124,6 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   }
 
  
-}
+
 
 export default AlbumArt

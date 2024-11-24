@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import AlbumArt from './AlbumArt';
 
-function SearchVolumio({ refresh, setRefresh, localhost, setMessage }) {
+function SearchVolumio({ refresh, setRefresh, localhost, setMessage, searchTerm }) {
 
-    const [inputData, setInputData] = useState("");
+    const [inputData, setInputData] = useState(searchTerm);
     const [openPanel, setOpenPanel] = useState(false);
     const [toggleLocalSearch, setToggleLocalSearch] = useState(false);
     const [albumArt, setAlbumArt] = useState({});
@@ -45,7 +45,7 @@ function SearchVolumio({ refresh, setRefresh, localhost, setMessage }) {
         setLoading(true)
         console.log(message);
 
-        const url = `http://volumio.local/api/v1/search?query=${encodeURIComponent(searchTerm)}`;
+        const url = localhost+`/api/v1/search?query=${encodeURIComponent(searchTerm)}`;
 
         try {
             const response = await fetch(url);
@@ -87,6 +87,16 @@ function SearchVolumio({ refresh, setRefresh, localhost, setMessage }) {
         }
     }
 
+    useEffect(() => {
+      
+    if (searchTerm) {
+        setInputData(searchTerm)
+        setOpenPanel(true)
+        searchTracks(searchTerm)
+    }
+    
+    }, [searchTerm])
+    
     return (
         <div className={`panel search-panel  ${openPanel ? " open-panel ":" closed-panel "}`}>
             

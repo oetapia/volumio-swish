@@ -44,7 +44,7 @@ const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue, se
 
   // Send command when socketCommand changes
   useEffect(() => {
-    setMessage(JSON.stringify(socketCommand))
+    //setMessage(JSON.stringify(socketCommand))
     if (socket && socketCommand) {
       if (typeof socketCommand === 'object') {
         if (socketCommand.command === "moveQueue") {
@@ -56,7 +56,7 @@ const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue, se
       } else {
         
         socket.emit(socketCommand);
-        setMessage(null)
+        //setMessage("")
       }
       console.log(`Sent command: ${JSON.stringify(socketCommand)}`);
     }
