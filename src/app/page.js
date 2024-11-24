@@ -29,8 +29,8 @@ export default function Home() {
   //console.log("from env",clientId,clientSecret,token)
 
   const localhost = "http://volumio.local";
-  const localAPI = "http://localhost:4000";
-  //var g_token = "hHY3vXOwzS0PZCJib3l2Td7vlyHgKvp7xAQiZZnCz1BBSL3B3WAjw1QPRe5U6U6D"
+  const localAPI = "http://localhost:4008";
+
 
   // Function to handle different player controls using WebSocket commands
   function volumioSocketCmd(command, value = null) {
