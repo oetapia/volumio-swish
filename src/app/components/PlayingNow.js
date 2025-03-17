@@ -72,14 +72,6 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
           
           // If playing, increment the seek time
           const newSeek = prevSeek + 1000; // Add 1 second (1000ms)
-          
-          // Check if we need to refresh from server
-          /* const now = Date.now();
-          if (now - lastSocketUpdateRef.current >= socketUpdateIntervalRef.current) {
-            volumioSocketCmd(`getState`);
-            lastSocketUpdateRef.current = now;
-          } */
-          
           return newSeek;
         });
       }, 1000);
@@ -96,6 +88,22 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
         clearInterval(seekIntervalRef.current);
       }
     };
+  }, [response && response.status, volumioSocketCmd]);
+
+  // NEW: Separate useEffect for server refresh
+  useEffect(() => {
+    // Only set up the refresh interval if we're playing
+    if (response && response.status === "play") {
+      const refreshInterval = setInterval(() => {
+        const now = Date.now();
+        if (now - lastSocketUpdateRef.current >= socketUpdateIntervalRef.current) {
+          volumioSocketCmd(`getState`);
+          lastSocketUpdateRef.current = now;
+        }
+      }, 1000); // Check every second if we need to refresh
+
+      return () => clearInterval(refreshInterval);
+    }
   }, [response && response.status, volumioSocketCmd]);
 
   // The seek display value - use localSeek if available, otherwise fall back to response.seek

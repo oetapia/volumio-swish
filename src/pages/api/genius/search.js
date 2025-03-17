@@ -1,8 +1,19 @@
 // src/pages/api/genius/search.js
+
+// In-memory cache (this will reset when the server restarts)
+const resultCache = {};
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { q: searchTerm } = req.query;
     const GENIUS_ACCESS_TOKEN = process.env.NEXT_PUBLIC_CLIENT_GENIUS_ACCESS_TOKEN;
+
+
+    // Check if the song data is already in the cache
+    if (resultCache[searchTerm]) {
+      console.log('Serving from cache');
+      return res.status(200).json(resultCache[searchTerm]);
+    }
 
     try {
       const response = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(searchTerm)}`, {

@@ -47,16 +47,25 @@ async function fetchLyrics(searchQuery) {
   }
 }
 
+// Helper function to sanitize the album and track names (remove content inside parentheses)
+function sanitizeString(inputString) {
+  return inputString.replace(/\s*\(.*?\)\s*/g, ''); // This removes everything in parentheses
+}
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { track_name, artist_name, album_name, duration } = req.query;
 
+    // Sanitize both the track and album names
+    const sanitizedTrackName = sanitizeString(track_name);
+    const sanitizedAlbumName = sanitizeString(album_name);
+
     // Create the search query
-    const searchOptions = `track_name=${track_name}&artist_name=${artist_name}&album_name=${album_name}&duration=${duration}`;
-    const searchOptionsLess = `track_name=${track_name}&artist_name=${artist_name}`;
+    const searchOptions = `track_name=${sanitizedTrackName}&artist_name=${artist_name}&album_name=${sanitizedAlbumName}&duration=${duration}`;
+    const searchOptionsLess = `track_name=${sanitizedTrackName}&artist_name=${artist_name}`;
 
     // Check if the lyrics are cached
-    const cacheKey = `${track_name}-${artist_name}-${album_name}`;
+    const cacheKey = `${sanitizedTrackName}-${artist_name}-${sanitizedAlbumName}`;
     if (lyricsCache[cacheKey]) {
       console.log('Serving from cache');
       return res.status(200).json(lyricsCache[cacheKey]);
@@ -65,7 +74,7 @@ export default async function handler(req, res) {
     try {
       // First try to search with the more specific options
       let json = await fetchLyrics(searchOptions);
-      
+
       if (json.trackName) {
         if (json.syncedLyrics) {
           json.parsedLyrics = parseLyrics(json.syncedLyrics);
@@ -75,17 +84,21 @@ export default async function handler(req, res) {
         return res.status(200).json(json);
       }
 
-      // If no match found, try the less specific search
-      json = await fetchLyrics(searchOptionsLess);
-      if (json.trackName) {
-        if (json.syncedLyrics) {
-          json.parsedLyrics = parseLyrics(json.syncedLyrics);
+      // If no match found, and the response is a 404, try the less specific search (without album and duration)
+      if (json.error && json.error === 'TrackNotFound') {
+        console.log('Track not found with full query, trying a less specific search');
+        json = await fetchLyrics(searchOptionsLess);
+        if (json.trackName) {
+          if (json.syncedLyrics) {
+            json.parsedLyrics = parseLyrics(json.syncedLyrics);
+          }
+          // Cache the result before returning it
+          lyricsCache[cacheKey] = { ...json, message: 'Found match with less specific search' };
+          return res.status(200).json({ ...json, message: 'Found match with less specific search' });
         }
-        // Cache the result before returning it
-        lyricsCache[cacheKey] = { ...json, message: 'Found match with less specific search' };
-        return res.status(200).json({ ...json, message: 'Found match with less specific search' });
       }
 
+      // If no match is found after both attempts, return a 404
       return res.status(404).json({ error: 'No lyrics found' });
 
     } catch (error) {

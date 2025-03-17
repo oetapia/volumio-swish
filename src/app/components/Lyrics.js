@@ -3,66 +3,17 @@ import Image from "next/image";
 import LyricsMetadata from "./LyricsMetadata";
 import GeniusMetadata from './GeniusMetadata';
 
-function Lyrics({meta,  variant, service, token, g_token, localhost, setPlayingNow, setMessage, localAPI, setSearchTerm}) {
+function Lyrics({meta, service, g_token,  setPlayingNow, setMessage, localAPI, setSearchTerm}) {
 
-const [albumArt, setalbumArt] = useState("")
 const [extraInfo, setExtraInfo] = useState(false)
 const [lyricsList, setLyricsList] = useState(false)
 
 console.log(service,meta)
 
 
-const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
-
-	
-
-  function extractIdFromURL(uri) {
-
-	//console.log('processing',uri) 
-  
-	var processed = uri.replace("tidal://song/",'')
-  
-	return processed
-  
-	}
-
-	
-
-  function checkArt(source) {
-
-	//console.log("source",source)
-	var structure	
-
-	if (source && source.includes("/albumart?")) {
-
-	structure = <img
-	className={`cover ${variant}`}
-	src={localhost+source || defaultImageUrl} // Use meta.image or fallback
-	onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-	alt={meta.title || "Default Album Art"}
-/>
-
-	}
-
-	else {
-
-		structure = <img
-		className={`cover ${variant}`}
-		src={source || defaultImageUrl} // Use meta.image or fallback
-		onError={(e) => { e.target.src = defaultImageUrl; }} // Fallback if image fails to load
-		alt={meta.title || "Default Album Art"}
-	/>
-
-	}
-
-	
-	return setalbumArt(structure)
-  }
 
   useEffect(() => {
-	checkArt(meta.albumart)
 	setPlayingNow(meta.position)
-	setExtraInfo(false)
   }, [meta])
   
 
