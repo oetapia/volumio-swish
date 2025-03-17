@@ -6,6 +6,7 @@ import Image from "next/image";
 
 function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
   const [openPanel, setOpenPanel] = useState(true);
+  const [sizePanel, setSizePanel] = useState("small");
   const [localSeek, setLocalSeek] = useState(null);
   const seekIntervalRef = useRef(null);
   const lastSocketUpdateRef = useRef(0);
@@ -113,7 +114,7 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
     : 0;
 
   return (
-    <div className={`panel player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
+    <div className={`panel ${sizePanel} player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
       <div className="panel-control">
         <button 
           className="button-open"
@@ -130,7 +131,7 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
       <div className="contained">
         {response && (
           <>
-            <ArtSingle localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} duration={formatDuration(response.duration * 1000)} />
+            <ArtSingle localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} duration={formatDuration(response.duration * 1000)}  />
             
             <div className="volume-buttons">
               {response.mute ?
@@ -196,6 +197,18 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
                 </div>
               </div>
             )}
+
+
+            {sizePanel?
+              <button onClick={() => setSizePanel("")}>
+                <Image src="/icons/icon-expand.svg" alt="Collapse" className="action" width={24} height={24} />
+              </button>
+              :
+                <button onClick={() => setSizePanel("small")}>
+                  <Image src="/icons/icon-collapse.svg" alt="Collapse" className="action" width={24} height={24} />
+                </button>
+                
+              }
           </>
         )}
       </div>

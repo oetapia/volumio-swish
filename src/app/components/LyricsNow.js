@@ -6,7 +6,7 @@ import Image from "next/image";
 
 
 function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
-  
+  const [sizePanel, setSizePanel] = useState("");
   const [openPanel, setOpenPanel] = useState(true);
 
 
@@ -24,7 +24,7 @@ function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, lo
   }, [response]);
 
   return (
-    <div className={`panel player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
+    <div className={`panel  ${sizePanel} player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
       <div className="panel-control">
 
 
@@ -48,6 +48,17 @@ function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, lo
            
           </>
         )}
+
+             {sizePanel?
+                        <button onClick={() => setSizePanel("")}>
+                          <Image src="/icons/icon-collapse.svg" alt="Collapse" className="action" width={24} height={24} />
+                        </button>
+                      :  
+                        <button onClick={() => setSizePanel("large")}>
+                          <Image src="/icons/icon-expand.svg" alt="Collapse" className="action" width={24} height={24} />
+                        </button>
+                        
+                      }
       </div>
     </div>
   );

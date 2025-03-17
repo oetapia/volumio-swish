@@ -48,6 +48,15 @@ body .scroll-list::-webkit-scrollbar-thumb {
 body .scroll-list::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0); /* Transparent */
 }
+body .small.panel {
+  max-width: 12em;
+}
+body .small.panel button {
+  margin: 0.1em;
+}
+body .large {
+  font-size: 150%;
+}
 body .panel {
   position: relative;
   max-height: 100vh;
@@ -372,6 +381,9 @@ body .album-list .meta .title {
   letter-spacing: 0.09em;
   font-kerning: auto;
   color: #afafae;
+}
+.album-art.small {
+  max-width: 12em;
 }
 
 @media (prefers-color-scheme: dark) {

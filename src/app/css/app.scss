@@ -46,6 +46,7 @@ body {
 
 
 
+
 	.scroll-list {
 		max-height: 70vh;
 		//max-width: 28em;
@@ -69,6 +70,17 @@ body {
 			}
 	}
 
+
+	.small.panel {
+		max-width: 12em;
+		button {
+			margin: 0.1em;
+		}
+	}
+
+	.large {
+		font-size: 150%;
+	}
 
 	
 	.panel {
@@ -413,6 +425,9 @@ body {
 			height: auto; /* Keep aspect ratio */
 			object-fit: cover; /* Ensures the image doesn’t get distorted */
 		}
+
+
+		
 		.meta {
 
 			flex: 1; /* Allows the description to take up the remaining space */
@@ -441,6 +456,9 @@ body {
 	 }
 	}
 	
+
+
+
 	.album-art {
 		//padding: 1em;
 		flex: 1;
@@ -501,8 +519,14 @@ body {
 	
 	
 		}
+
+		&.small {
+			max-width: 12em;
+		 }
+		
 	 }
-	
+
+	 
 
 
 	 @media (prefers-color-scheme: dark) {

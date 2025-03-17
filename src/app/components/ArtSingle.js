@@ -69,26 +69,14 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	return (
 		<>
 
-{
-		extraInfo?
-		<GeniusMetadata
-         setMessage={setMessage}
-         meta={meta}
-         g_token={g_token}
-		 localAPI={localAPI}
-		 setSearchTerm={setSearchTerm}
-         />
-		:""
-		}
+
   
-	  <div className={"album-art"}>
+	  <div className={`album-art`}>
 
 		
-	  {
-		extraInfo?
-		""
-		:albumArt
-		}
+
+		{albumArt}
+
 		
   
 		  <div className="meta">
