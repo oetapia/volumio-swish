@@ -25,6 +25,8 @@ export default function Home() {
   const [responseQueue, setResponseQueue] = useState(null);
   const clientIdTidal = process.env.NEXT_PUBLIC_CLIENT_ID_TIDAL;
   const clientSecretTidal = process.env.NEXT_PUBLIC_CLIENT_SECRET_TIDAL;
+  const clientIdGenius = process.env.NEXT_PUBLIC_CLIENT_ID_GENIUS;
+  const clientSecretGenius = process.env.NEXT_PUBLIC_CLIENT_SECRET_GENIUS;
 
 
   //console.log("from env",clientId,clientSecret,token)
@@ -94,6 +96,7 @@ export default function Home() {
 
       <TokenLogin ClientId={clientIdTidal} setToken={setToken} ClientSecret={clientSecretTidal} service={"tidal"} source={"https://auth.tidal.com/v1/oauth2/token"} setMessage={setMessage} ></TokenLogin>
   
+     {/*  <TokenLogin ClientId={clientIdGenius} setToken={setToken} ClientSecret={clientSecretGenius} service={"tidal"} source={"https://auth.tidal.com/v1/oauth2/token"} setMessage={setMessage} ></TokenLogin> */}
      
 
       <WebSockets

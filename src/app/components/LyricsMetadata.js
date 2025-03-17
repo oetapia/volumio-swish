@@ -6,139 +6,50 @@ function LyricsMetadata({ setMessage, meta }) {
   const [lyricsMeta, setLyricsMeta] = useState('');
   const [currentLyricId, setCurrentLyricId] = useState(null);
   const [localSeek, setLocalSeek] = useState(null);
-  const lrcurl = "https://lrclib.net";
+
   
   // References for efficient updates
   const seekIntervalRef = useRef(null);
   const lastSocketUpdateRef = useRef(0);
   
-  async function searchLyrics(track_data) {
-    console.log("starting function", track_data);
-    setMessage("Searching in lrclib...");
-    setLoading(true);
-    
-    const searchOptions = `track_name=${track_data.title}&artist_name=${track_data.artist}&album_name=${track_data.album}&duration=${track_data.duration}`;
-    const searchOptionsLess = `track_name=${track_data.title}&artist_name=${track_data.artist}`;
-    console.log("searching: ", searchOptions);
+ // Fetch lyrics from the Next.js API route
+ async function fetchLyricsFromAPI(trackData) {
+  const { title, artist, album, duration } = trackData;
+  setLoading(true);
+  setMessage("Searching for lyrics...");
 
-    const url = `${lrcurl}/api/get?${searchOptions}`;
-    const urlLess = `${lrcurl}/api/get?${searchOptionsLess}`;
+  try {
+    // Call the Next.js API route to get lyrics
+    const res = await fetch(`/api/lrclib/search?track_name=${title}&artist_name=${artist}&album_name=${album}&duration=${duration}`);
+    const data = await res.json();
 
-    try {
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      
-      const json = await response.json();
-      console.log('Response from LRCLib:', json);
-      
-      if (json.trackName) {
-        if (json.syncedLyrics) {
-          const parsedLyrics = parseLyrics(json.syncedLyrics);
-          setLyricsParsed(parsedLyrics);
-          setLyricsMeta(
-            <ul className='lyrics'>
-              {parsedLyrics.map((line) => (
-                <li 
-                  key={line.time} 
-                  id={`lyric-${line.time}`}
-                  className={currentLyricId === line.time ? 'active' : ''}
-                >
-                  {line.text}
-                </li>
-              ))}
-            </ul>
-          );
-        } else {
-          setLyricsMeta(<div className="plain-lyrics">{json.plainLyrics}</div>);
-        }
-        
-        setMessage('');
-      } else {
-        setMessage('No results found.');
-        // Try the less specific search if the first one fails
-        tryLessSpecificSearch(searchOptionsLess);
-      }
-    } catch (error) {
-      console.error('Error searching tracks:', error.message);
-      setMessage(`Error: ${error.message}`);
-      // Try the less specific search on error
-      tryLessSpecificSearch(searchOptionsLess);
-    } finally {
-      setLoading(false);
+    if (res.ok && data.trackName) {
+      // Process the parsed lyrics returned from the API
+      setLyricsParsed(data.parsedLyrics || []);
+      setLyricsMeta(
+        <ul className='lyrics'>
+          {data.parsedLyrics.map((line) => (
+            <li 
+              key={line.time} 
+              id={`lyric-${line.time}`}
+              className={currentLyricId === line.time ? 'active' : ''}
+            >
+              {line.text}
+            </li>
+          ))}
+        </ul>
+      );
+      setMessage('');
+    } else {
+      setMessage(data.error || 'No lyrics found.');
     }
+  } catch (error) {
+    setMessage(`Error: ${error.message}`);
+  } finally {
+    setLoading(false);
   }
-  
-  // Optional: Try a less specific search if the detailed one fails
-  async function tryLessSpecificSearch(searchOptionsLess) {
-    try {
-      const response = await fetch(`${lrcurl}/api/get?${searchOptionsLess}`);
-      
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      
-      const json = await response.json();
-      
-      if (json.trackName) {
-        if (json.syncedLyrics) {
-          const parsedLyrics = parseLyrics(json.syncedLyrics);
-          setLyricsParsed(parsedLyrics);
-          setLyricsMeta(
-            <ul className='lyrics'>
-              {parsedLyrics.map((line) => (
-                <li 
-                  key={line.time} 
-                  id={`lyric-${line.time}`}
-                  className={currentLyricId === line.time ? 'active' : ''}
-                >
-                  {line.text}
-                </li>
-              ))}
-            </ul>
-          );
-        } else {
-          setLyricsMeta(<div className="plain-lyrics">{json.plainLyrics}</div>);
-        }
-        
-        setMessage('Found match with less specific search');
-      }
-    } catch (error) {
-      console.error('Error in less specific search:', error.message);
-    }
-  }
+}
 
-  function parseLyrics(text) {
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    const parsedLines = [];
-    
-    lines.forEach(line => {
-      // Match all timestamp patterns in the line
-      const timestampMatches = line.match(/\[\d+:\d+\.\d+\]/g);
-      if (!timestampMatches) return;
-      
-      // Extract the text content (everything after the last timestamp)
-      const lastTimestampIndex = line.lastIndexOf(']') + 1;
-      const lyricText = line.substring(lastTimestampIndex).trim();
-      
-      // Convert each timestamp to milliseconds and create an entry
-      timestampMatches.forEach(timestamp => {
-        const timeStr = timestamp.substring(1, timestamp.length - 1); // Remove [ and ]
-        const [minutes, seconds] = timeStr.split(':');
-        const timeMs = (parseInt(minutes) * 60 + parseFloat(seconds)) * 1000;
-        
-        parsedLines.push({
-          time: timeMs,
-          text: lyricText
-        });
-      });
-    });
-    
-    // Sort by timestamp
-    return parsedLines.sort((a, b) => a.time - b.time);
-  }
 
   // Find the current and next lyrics based on time
   function findCurrentLyric(parsedLyrics, currentTimeMs) {
@@ -174,7 +85,7 @@ function LyricsMetadata({ setMessage, meta }) {
   // Search for lyrics when track metadata changes
   useEffect(() => {
     if (meta.title) {
-      searchLyrics(meta);
+      fetchLyricsFromAPI(meta);
     }
   }, [meta.title, meta.artist, meta.album, meta.duration]);
   

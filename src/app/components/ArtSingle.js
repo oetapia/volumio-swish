@@ -8,7 +8,7 @@ function ArtSingle({meta,  variant, service, token, g_token, localhost, setPlayi
 const [albumArt, setalbumArt] = useState("")
 const [extraInfo, setExtraInfo] = useState(false)
 
-console.log(service,meta)
+//console.log(service,meta)
 
 
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image

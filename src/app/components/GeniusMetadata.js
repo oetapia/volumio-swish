@@ -21,7 +21,7 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
 	var searchOptions = `${track_data.title} ${track_data.artist}`
 	console.log("searching: ",searchOptions)
 
-	  const url = `${localAPI}/api/genius/search?q=${encodeURIComponent(searchOptions)}`; // Updated to search dynamically
+	  const url = `/api/genius/search?q=${encodeURIComponent(searchOptions)}`; // Updated to search dynamically
 
 	  try {
 		const response = await fetch(url, 
@@ -65,7 +65,7 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
 
 	setMessage("Searching matching tracks")
 
-    const url = `${localAPI}/api/genius/songs?q=${encodeURIComponent(searchTerm)}`; // Updated to search dynamically
+    const url = `/api/genius/songs?q=${encodeURIComponent(searchTerm)}`; // Updated to search dynamically
 
     try {
       const response = await fetch(url, { headers });

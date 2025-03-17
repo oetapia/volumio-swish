@@ -133,7 +133,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 				height={16}
 				/>:
 				<Image
-					src="/icons/icon-author-search.svg"
+					src="/icons/icon-lyrics.svg"
 					alt="Search samples"
 					className="action"
 					width={16}

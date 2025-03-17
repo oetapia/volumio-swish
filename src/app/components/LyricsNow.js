@@ -33,9 +33,9 @@ function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, lo
           onClick={() => setOpenPanel(!openPanel)}
         >
           {openPanel ? (
-            <Image src="/icons/icon-author-search.svg" alt="Toggle" className="toggle-panel" width={18} height={18} />
+            <Image src="/icons/icon-graph.svg" alt="Toggle" className="toggle-panel" width={18} height={18} />
           ) : (
-            <Image src="/icons/icon-author-search.svg" alt="Toggle" className="toggle-panel" width={24} height={24} />
+            <Image src="/icons/icon-graph.svg" alt="Toggle" className="toggle-panel" width={24} height={24} />
           )}
         </button>
       </div>
