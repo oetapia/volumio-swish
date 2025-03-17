@@ -7,7 +7,7 @@ import Image from "next/image";
 
 function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
   const [sizePanel, setSizePanel] = useState("");
-  const [openPanel, setOpenPanel] = useState(true);
+  const [openPanel, setOpenPanel] = useState(false);
 
 
 

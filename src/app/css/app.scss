@@ -72,14 +72,14 @@ body {
 
 
 	.small.panel {
-		max-width: 12em;
+		max-width: 16em;
 		button {
-			margin: 0.1em;
+			margin: 0.3em 0.6em;
 		}
 	}
 
-	.large {
-		font-size: 150%;
+	.large .lyrics {
+		font-size: 175%;
 	}
 
 	
@@ -565,8 +565,8 @@ body {
 				order: 3;
 			}
 			.album-art {
-				max-width: 16em;
-				width: 16em;
+				//max-width: 16em;
+				//width: 16em;
 				text-align: center;
 				.cover.single {
 					max-width: 12em;
@@ -574,7 +574,7 @@ body {
 			}
 
 			.volume-buttons {
-				flex-wrap: nowrap;
+				//flex-wrap: nowrap;
 			}
 
 

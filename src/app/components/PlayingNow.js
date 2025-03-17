@@ -202,8 +202,7 @@ function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, lo
             {sizePanel?
               <button onClick={() => setSizePanel("")}>
                 <Image src="/icons/icon-expand.svg" alt="Collapse" className="action" width={24} height={24} />
-              </button>
-              :
+              </button>:
                 <button onClick={() => setSizePanel("small")}>
                   <Image src="/icons/icon-collapse.svg" alt="Collapse" className="action" width={24} height={24} />
                 </button>

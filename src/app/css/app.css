@@ -49,13 +49,13 @@ body .scroll-list::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0); /* Transparent */
 }
 body .small.panel {
-  max-width: 12em;
+  max-width: 16em;
 }
 body .small.panel button {
-  margin: 0.1em;
+  margin: 0.3em 0.6em;
 }
-body .large {
-  font-size: 150%;
+body .large .lyrics {
+  font-size: 175%;
 }
 body .panel {
   position: relative;
@@ -412,15 +412,10 @@ body .album-list .meta .title {
     order: 3;
   }
   body .album-art {
-    max-width: 16em;
-    width: 16em;
     text-align: center;
   }
   body .album-art .cover.single {
     max-width: 12em;
-  }
-  body .volume-buttons {
-    flex-wrap: nowrap;
   }
   html {
     color-scheme: dark;

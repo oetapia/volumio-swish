@@ -176,7 +176,7 @@ function LyricsMetadata({ setMessage, meta }) {
 
   return (
     <div className='scroll-list'>
-      <div>
+      <div className='lyrics'>
         {loading && <div>Loading...</div>}
         
         {lyricsMeta}
