@@ -1,26 +1,112 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ArtSingle from './ArtSingle';
 import Image from "next/image";
 
-
-function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
-  
+function PlayingNow({ refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
   const [openPanel, setOpenPanel] = useState(true);
+  const [localSeek, setLocalSeek] = useState(null);
+  const seekIntervalRef = useRef(null);
+  const lastSocketUpdateRef = useRef(0);
+  const socketUpdateIntervalRef = useRef(5000); // 5 seconds between socket updates
 
+  function formatDuration(duration) {
+    // Check if duration is in milliseconds (large number) and convert to seconds if needed
+    const durationInSeconds = duration > 1000 ? Math.floor(duration / 1000) : duration;
+    
+    const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
 
-
+  // Initialize player state in useEffect, not during render
   useEffect(() => {
+    // Only call this on mount or when dependencies change
     volumioSocketCmd(`getState`);
-  }, [])
-  
-  
+  }, []);
+
+  // Update playingNow state in useEffect, not during render
+  useEffect(() => {
+    // This prevents the state update during parent render
+    if (response) {
+      setPlayingNow(response);
+    }
+  }, [response, setPlayingNow]);
+
+  // Set up document title
+  useEffect(() => {
+    if (response && response.title) {
+      document.title = `${response.title} - ${response.artist}`;
+    }
+  }, [response]);
+
+  // Handle local seek updates and periodic socket refresh
+  useEffect(() => {
+    // Initialize local seek state from response
+    if (response && response.seek !== undefined) {
+      setLocalSeek(response.seek);
+      lastSocketUpdateRef.current = Date.now();
+    }
+
+    // Clean up function
+    return () => {
+      if (seekIntervalRef.current) {
+        clearInterval(seekIntervalRef.current);
+      }
+    };
+  }, [response]);
+
+  // Set up the seek interval when playing
+  useEffect(() => {
+    if (response && response.status === "play") {
+      // Clear any existing interval
+      if (seekIntervalRef.current) {
+        clearInterval(seekIntervalRef.current);
+      }
+
+      // Update local seek value every second
+      seekIntervalRef.current = setInterval(() => {
+        setLocalSeek(prevSeek => {
+          if (prevSeek === null) return null;
+          
+          // If playing, increment the seek time
+          const newSeek = prevSeek + 1000; // Add 1 second (1000ms)
+          
+          // Check if we need to refresh from server
+          /* const now = Date.now();
+          if (now - lastSocketUpdateRef.current >= socketUpdateIntervalRef.current) {
+            volumioSocketCmd(`getState`);
+            lastSocketUpdateRef.current = now;
+          } */
+          
+          return newSeek;
+        });
+      }, 1000);
+    } else {
+      // If not playing, clear the interval
+      if (seekIntervalRef.current) {
+        clearInterval(seekIntervalRef.current);
+      }
+    }
+
+    // Clean up
+    return () => {
+      if (seekIntervalRef.current) {
+        clearInterval(seekIntervalRef.current);
+      }
+    };
+  }, [response && response.status, volumioSocketCmd]);
+
+  // The seek display value - use localSeek if available, otherwise fall back to response.seek
+  const displaySeek = localSeek !== null ? localSeek : (response && response.seek);
+  const seekPercentage = response && response.duration 
+    ? Math.min(Math.max((displaySeek / (response.duration * 1000)) * 100, 0), 100) 
+    : 0;
+
   return (
     <div className={`panel player-panel ${openPanel ? "open-panel" : "closed-panel"}`}>
       <div className="panel-control">
-
-
         <button 
           className="button-open"
           onClick={() => setOpenPanel(!openPanel)}
@@ -36,36 +122,34 @@ function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd, l
       <div className="contained">
         {response && (
           <>
-            <ArtSingle localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} />
+            <ArtSingle localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} duration={formatDuration(response.duration * 1000)} />
             
             <div className="volume-buttons">
-            {response.mute?
-            <button onClick={() => volumioSocketCmd("unmute")}>
-                <Image src="/icons/icon-unmute.svg" alt="Unmute" className="action" width={16} height={16} />
-              </button>:
-            <button onClick={() => volumioSocketCmd("mute")}>
-                <Image src="/icons/icon-mute.svg" alt="Mute" className="action" width={16} height={16} />
-              </button>}
+              {response.mute ?
+                <button onClick={() => volumioSocketCmd("unmute")}>
+                  <Image src="/icons/icon-unmute.svg" alt="Unmute" className="action" width={16} height={16} />
+                </button> :
+                <button onClick={() => volumioSocketCmd("mute")}>
+                  <Image src="/icons/icon-mute.svg" alt="Mute" className="action" width={16} height={16} />
+                </button>
+              }
               <button onClick={() => volumioSocketCmd("volume", "-")}>
                 <Image src="/icons/icon-volume-down.svg" alt="Vol -" className="action" width={16} height={16} />
               </button>
            
               {response.volume && (
                 <div className='volume-level'>
-                {response.volume}
-                <div className="progress-container overlay">
-                <div
-                className="progress-fill"
-                title={response.volume}
-                style={{ width: `${Math.min(Math.max(response.volume, 0), 100)}%` }}
-                >
+                  {response.volume}
+                  <div className="progress-container overlay">
+                    <div
+                      className="progress-fill"
+                      title={response.volume}
+                      style={{ width: `${Math.min(Math.max(response.volume, 0), 100)}%` }}
+                    >
+                    </div>
+                  </div>
                 </div>
-                </div>
-                </div>
-              
-              
               )}
-
 
               <button onClick={() => volumioSocketCmd("volume", "+")}>
                 <Image src="/icons/icon-volume-up.svg" alt="Vol +" className="action" width={16} height={16} />
@@ -74,21 +158,36 @@ function PlayingNow({  refresh, setRefresh, token, response, volumioSocketCmd, l
               <button onClick={() => volumioSocketCmd("prev")}>
                 <Image src="/icons/icon-prev.svg" alt="Prev" className="action" width={24} height={32} />
               </button>
-              {response.status==="play"?
-              <button onClick={() => volumioSocketCmd("pause")}>
-                <Image src="/icons/icon-pause-circle.svg" alt="Pause" className="action" width={32} height={32} />
-              </button>:<button onClick={() => volumioSocketCmd("play")}>
-                <Image src="/icons/icon-play-circle.svg" alt="Play" className="action" width={32} height={32} />
-              </button>
+              {response.status === "play" ?
+                <button onClick={() => volumioSocketCmd("pause")}>
+                  <Image src="/icons/icon-pause-circle.svg" alt="Pause" className="action" width={32} height={32} />
+                </button> :
+                <button onClick={() => volumioSocketCmd("play")}>
+                  <Image src="/icons/icon-play-circle.svg" alt="Play" className="action" width={32} height={32} />
+                </button>
               }
               
               <button onClick={() => volumioSocketCmd("next")}>
                 <Image src="/icons/icon-next.svg" alt="Next" className="action" width={24} height={32} />
               </button>
               <button onClick={() => volumioSocketCmd("addToFavourites", response)}>
-                <Image src="/icons/icon-heart.svg" alt="Vol -" className="action" width={16} height={16} />
+                <Image src="/icons/icon-heart.svg" alt="Favorite" className="action" width={16} height={16} />
               </button>
             </div>
+            
+            {(response.seek !== undefined || localSeek !== null) && response.duration && (
+              <div className='seek-level'>
+                {formatDuration(displaySeek)} / {formatDuration(response.duration * 1000)}
+                <div className="progress-container overlay">
+                  <div
+                    className="progress-fill"
+                    title={formatDuration(displaySeek)}
+                    style={{ width: `${seekPercentage}%` }}
+                  >
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

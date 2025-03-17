@@ -4,6 +4,7 @@ import AlbumArt from './AlbumArtGenius';
 function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) {
   const [loading, setLoading] = useState(false);
   const [extraMeta, setExtraMeta] = useState('');
+  const [otherMeta, setOtherMeta] = useState('');
   const [searchResults, setSearchResults] = useState("");
   const [GENIUS_TOKEN, setToken] = useState(g_token);
 
@@ -82,17 +83,22 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
 
 
 			const structure = json.response.song.song_relationships
-			.filter(item => item.type === "samples" || item.type === "sampled_in") // Filter relevant relationships
+			.filter(item => item.type === "samples" || item.type === "sampled_in" || item.type === "covered_by" || item.type === "cover_of") // Filter relevant relationships
 			.map(item => (
 			  <div key={item.type}>
-				<h4>{item.type === "samples" ? "Samples" : "Sampled by"}</h4>
+				{item.type === "samples" ? <h4>Samples</h4> : "" }
+				{item.type === "sampled_in" ? <h4>Sampled in</h4> : "" }
+				{item.type === "cover_of" ? <h4>Covers of</h4> : "" }
+				{item.type === "covered_by" ? <h4>Covered by</h4> : "" }
 				{item.songs.map(child => (
 				  <AlbumArt setSearchTerm={setSearchTerm} key={child.id} meta={child} variant={"search"} />
 				))}
 			  </div>
 			));
-		  
 
+			const extra = json.response.song.release_date_for_display
+		  
+			setOtherMeta(extra)
 			setExtraMeta(structure);
 			console.log("genius",json.response)
 		}
@@ -116,11 +122,13 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
   
 
   return (
-    <div className='samples scroll-list'>
+    <div className='scroll-list'>
 	  {searchResults}
 	  <div className=''>
       {loading ? <div>Loading...</div>:""}
-      	{extraMeta}
+      	{otherMeta}
+		{extraMeta}
+		
 	  </div>
 
 

@@ -145,6 +145,20 @@ body {
 		}
 	}
 
+	.seek-level {
+		//width: 1.6em;
+		//border: 2px solid $highlight;
+		//border-radius: 2em;
+		position: relative;
+		font-size: 0.7em;
+		padding-top: 0.3em;
+		.overlay {
+			top: 0;
+			//bottom: 0;
+			left: 0
+		}
+	}
+
 	.progress-container {
 		width: 100%; /* Total width of the progress bar */
 		height: 0.3em; /* Height of the progress bar */
@@ -156,7 +170,7 @@ body {
 
 	.progress-fill {
 		height: 100%; /* Fill the entire height of the container */
-		background-color: lighten($highlight,10%); /* Fill color */
+		background-color: lighten($highlight,5%); /* Fill color */
 		transition: width 0.5s ease-in-out; /* Smooth transition for width changes */
 	}
 	
@@ -324,6 +338,23 @@ body {
 		}
 	}
 
+
+	.lyrics {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		li {
+			margin: 0.6em 0;
+			&.active {
+				font-weight: 700;
+				font-size: 1.3em;
+				margin: 1em 0;
+				color: $light;
+			}
+		}
+		
+	}
+
 	.samples {
 		font-size: .9em;
 		//max-width: 45vh;
@@ -411,7 +442,7 @@ body {
 	}
 	
 	.album-art {
-		padding: 1em;
+		//padding: 1em;
 		flex: 1;
 		position: relative;
 		//max-width: 24em;
@@ -518,6 +549,9 @@ body {
 				}
 			}
 
+			.volume-buttons {
+				flex-wrap: nowrap;
+			}
 
 
 

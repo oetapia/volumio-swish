@@ -4,6 +4,7 @@ import { useState } from "react";
 import SearchVolumio from "./components/SearchVolumio";
 import TokenLogin from "./components/TokenLogin";
 import PlayingNow from "./components/PlayingNow";
+import LyricsNow from "./components/LyricsNow";
 import QueueList from "./components/QueueList";
 import ToastMessages from "./components/ToastMessages";
 import WebSockets from './components/WebSockets';
@@ -129,6 +130,20 @@ export default function Home() {
       
 
         <PlayingNow
+          g_token={g_token}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          token={token}
+          setPlayingNow={setPlayingNow}
+          localhost={localhost}
+          volumioSocketCmd={volumioSocketCmd}
+          response={responseState}
+          setMessage={setMessage}
+          localAPI={localAPI}
+          setSearchTerm={setSearchTerm}
+        />
+
+        <LyricsNow
           g_token={g_token}
           refresh={refresh}
           setRefresh={setRefresh}

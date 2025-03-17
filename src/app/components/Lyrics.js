@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
-import SearchSimilar from "./SimilarToTidal";
+import LyricsMetadata from "./LyricsMetadata";
 import GeniusMetadata from './GeniusMetadata';
 
-function ArtSingle({meta,  variant, service, token, g_token, localhost, setPlayingNow, setMessage, localAPI, setSearchTerm, duration}) {
+function Lyrics({meta,  variant, service, token, g_token, localhost, setPlayingNow, setMessage, localAPI, setSearchTerm}) {
 
 const [albumArt, setalbumArt] = useState("")
 const [extraInfo, setExtraInfo] = useState(false)
+const [lyricsList, setLyricsList] = useState(false)
 
 console.log(service,meta)
 
@@ -26,7 +27,6 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 	}
 
 	
-
 
   function checkArt(source) {
 
@@ -80,60 +80,66 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
          />
 		:""
 		}
-  
-	  <div className={"album-art"}>
 
-		
-	  {
-		extraInfo?
-		""
-		:albumArt
+
+{
+		lyricsList?
+		<LyricsMetadata
+         setMessage={setMessage}
+         meta={meta}
+         g_token={g_token}
+		 localAPI={localAPI}
+		 setSearchTerm={setSearchTerm}
+         />
+		:""
 		}
-		
   
-		  <div className="meta">
-			  <p className="primary">
-				  <span className="title">
-				  {meta.title}
-				  </span>
-			  </p>
-			  <p className="secondary">
-			  <span className="artist">
-				  {meta.artist}
-			  </span>
-			  &nbsp; - &nbsp;
-			  <span className="album">
-				  {meta.album}
-			  </span> 
-			  </p>
-			  <p className="extra">
-			  {meta.trackType?
-				  <span className="item">
-					  {meta.trackType}
-				  </span>
-				  :""}
-				  {meta.samplerate? 
-				  <span className="item">
-					  {meta.samplerate}
-				  </span> : 
-				  ""}
-				  
-				  <span className="item">
-				  	{duration}
-				  </span>
-			
-			  </p>
-			  {meta.service ==="tidal"?
-			  <>
-				<SearchSimilar localhost={localhost} service={meta.service} setMessage={setMessage} type={"radio"} token={token} passedId={extractIdFromURL(meta.uri)}/>
-				<SearchSimilar service={meta.service} localhost={localhost} setMessage={setMessage} type={"album"} token={token} passedId={extractIdFromURL(meta.uri)}/>
+	  <div>
+  
+		  <div >
+			  
+			<button 
+				className=' btn btn-basic' 
+				onClick={()=>setExtraInfo(!extraInfo)}
+				title="Find Samples"
+				>{extraInfo?
+				<Image
+				src="/icons/icon-close.svg"
+				alt="Close"
+				className="action"
+				width={16}
+				height={16}
+				/>:
+				<Image
+					src="/icons/icon-author-search.svg"
+					alt="Search samples"
+					className="action"
+					width={16}
+					height={16}
+				/>
+				}</button>
 
 
-			  </>
-				:''
-				}
-
-
+<button 
+				className=' btn btn-basic' 
+				onClick={()=>setLyricsList(!lyricsList)}
+				title="Find Samples"
+				>{lyricsList?
+				<Image
+				src="/icons/icon-close.svg"
+				alt="Close"
+				className="action"
+				width={16}
+				height={16}
+				/>:
+				<Image
+					src="/icons/icon-author-search.svg"
+					alt="Search samples"
+					className="action"
+					width={16}
+					height={16}
+				/>
+				}</button>
 				
 		  </div>
   
@@ -144,4 +150,4 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 }
 
 
-export default ArtSingle
+export default Lyrics
