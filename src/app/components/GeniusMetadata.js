@@ -16,6 +16,15 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
     Authorization: `Bearer ${GENIUS_TOKEN}`,
   };
 
+
+  // Improved sanitization function - less aggressive
+  function sanitizeString(inputString) {
+  if (!inputString) return '';
+
+  // Only remove content in parentheses, keep everything else
+  return inputString.replace(/\s*\(.*?\)\s*/g, ' ').trim();
+  }
+
   async function searchTitle(track_data) {
     setMessage("Searching in Genius...")
     setLoading(true)
@@ -120,6 +129,7 @@ function GeniusMetadata({ setMessage, meta, g_token, localAPI, setSearchTerm }) 
       prevArtistRef.current = meta.artist;
       
       // Trigger search with new song info
+      
       searchTitle(meta);
     }
   }, [meta]);

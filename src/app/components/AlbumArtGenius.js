@@ -7,7 +7,13 @@ function AlbumArt({meta, type, index, refresh, setRefresh, variant,localhost, se
 
 const defaultImageUrl = '/default-cover.png'; // Replace with the path to your default image
 
+	// Improved sanitization function - less aggressive
+	function sanitizeString(inputString) {
+	if (!inputString) return '';
 	
+	// Only remove content in parentheses, keep everything else
+	return inputString.replace(/\s*\(.*?\)\s*/g, ' ').trim();
+  }
 
   function formatDuration(duration) {
 	const minutes = Math.floor(duration / 60);
@@ -104,7 +110,7 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
 <button 
 				className="btn-basic" 
 				title={" from track"}
-				onClick={()=>setSearchTerm(meta.artist_names+" "+meta.title)} // Use handler to initiate fetch
+				onClick={()=>setSearchTerm(sanitizeString(meta.artist_names)+" "+sanitizeString(meta.title))} // Use handler to initiate fetch
 			>
 				
 				<Image

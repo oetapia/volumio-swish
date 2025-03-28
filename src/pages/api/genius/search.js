@@ -3,6 +3,14 @@
 // In-memory cache (this will reset when the server restarts)
 const resultCache = {};
 
+// Improved sanitization function - less aggressive
+function sanitizeString(inputString) {
+  if (!inputString) return '';
+  
+  // Only remove content in parentheses, keep everything else
+  return inputString.replace(/\s*\(.*?\)\s*/g, ' ').trim();
+}
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { q: searchTerm } = req.query;
@@ -16,7 +24,7 @@ export default async function handler(req, res) {
     }
 
     try {
-      const response = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(searchTerm)}`, {
+      const response = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(sanitizeString(searchTerm))}`, {
         headers: {
           Authorization: `Bearer ${GENIUS_ACCESS_TOKEN}`,
         },
