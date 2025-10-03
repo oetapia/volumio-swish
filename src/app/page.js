@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
 import SearchVolumio from "./components/SearchVolumio";
 import TokenLogin from "./components/TokenLogin";
 import PlayingNow from "./components/PlayingNow";
@@ -8,13 +10,38 @@ import LyricsNow from "./components/LyricsNow";
 import QueueList from "./components/QueueList";
 import ToastMessages from "./components/ToastMessages";
 import WebSockets from './components/WebSockets';
-
 import DraggableDroppable from './components/DraggableDroppable';
 
-
 export default function Home() {
+  const searchParams = useSearchParams();
 
-  const [refresh, setRefresh] = useState(false)
+// Read values from URL with defaults
+const initQueuePanel =
+  searchParams.get("queuePanel") !== null
+    ? searchParams.get("queuePanel") === "true"
+    : true; // default true
+
+const initLyricsPanel =
+  searchParams.get("lyricsPanel") !== null
+    ? searchParams.get("lyricsPanel") === "true"
+    : false; // default false
+
+const initLyricsSize = searchParams.get("lyricsSize") || ""; // default empty string
+
+const initLyricsState =
+  searchParams.get("lyricsState") !== null
+    ? searchParams.get("lyricsState") === "true"
+    : false; // default false
+
+
+  // Panels & UI states
+  const [lyricsPanel, setLyricsPanel] = useState(initLyricsPanel);
+  const [queuePanel, setQueuePanel] = useState(initQueuePanel);
+  const [lyricsSize, setLyricsSize] = useState(initLyricsSize);
+  const [lyricsState, setLyricsState] = useState(initLyricsState);
+
+  // Other states
+  const [refresh, setRefresh] = useState(false);
   const [token, setToken] = useState(null);
   const [g_token, setGToken] = useState(null);
   const [socketCommand, setSocketCommand] = useState(null);
@@ -23,21 +50,18 @@ export default function Home() {
   const [playingNow, setPlayingNow] = useState(null);
   const [responseState, setResponseState] = useState(null);
   const [responseQueue, setResponseQueue] = useState(null);
+
+  // Env vars
   const clientIdTidal = process.env.NEXT_PUBLIC_CLIENT_ID_TIDAL;
   const clientSecretTidal = process.env.NEXT_PUBLIC_CLIENT_SECRET_TIDAL;
   const clientIdGenius = process.env.NEXT_PUBLIC_CLIENT_ID_GENIUS;
   const clientSecretGenius = process.env.NEXT_PUBLIC_CLIENT_SECRET_GENIUS;
 
-
-  //console.log("from env",clientId,clientSecret,token)
-
   const localhost = "http://volumio.local";
   const localAPI = "http://localhost:4008";
 
-
-  // Function to handle different player controls using WebSocket commands
+  // Handle Volumio WebSocket commands
   function volumioSocketCmd(command, value = null) {
-    
     switch (command) {
       case "play":
       case "pause":
@@ -58,24 +82,22 @@ export default function Home() {
         setSocketCommand({ command: "setRepeat", value: { value } });
         break;
       case "volume":
-        setSocketCommand({ command: "volume", value: value });
+        setSocketCommand({ command: "volume", value });
         break;
       case "getQueue":
-        console.log("Setting socket command to getQueue"); // Debug log
-        setSocketCommand(command); // Should trigger getQueue in WebSockets.js
+        setSocketCommand(command);
         break;
       case "getState":
         setSocketCommand(command);
         break;
       case "addToFavourites":
-        setSocketCommand({ command: "addToFavourites",  value: {
-          uri: value.uri,
-          title: value.title,
-          service: value.service,
-      }, });
+        setSocketCommand({
+          command: "addToFavourites",
+          value: { uri: value.uri, title: value.title, service: value.service },
+        });
         break;
       case "removeFromQueue":
-        setSocketCommand({ command: "removeFromQueue", value: value });
+        setSocketCommand({ command: "removeFromQueue", value });
         break;
       case "addToQueue":
         setSocketCommand({ command: "addToQueue", uri: value });
@@ -86,18 +108,20 @@ export default function Home() {
       default:
         console.error("Unknown command");
     }
-    
   }
 
   return (
-    <div className={"whole"}>
+    <div className="whole">
+      <DraggableDroppable />
 
-      <DraggableDroppable> </DraggableDroppable>
-
-      <TokenLogin ClientId={clientIdTidal} setToken={setToken} ClientSecret={clientSecretTidal} service={"tidal"} source={"https://auth.tidal.com/v1/oauth2/token"} setMessage={setMessage} ></TokenLogin>
-  
-     {/*  <TokenLogin ClientId={clientIdGenius} setToken={setToken} ClientSecret={clientSecretGenius} service={"tidal"} source={"https://auth.tidal.com/v1/oauth2/token"} setMessage={setMessage} ></TokenLogin> */}
-     
+      <TokenLogin
+        ClientId={clientIdTidal}
+        setToken={setToken}
+        ClientSecret={clientSecretTidal}
+        service={"tidal"}
+        source={"https://auth.tidal.com/v1/oauth2/token"}
+        setMessage={setMessage}
+      />
 
       <WebSockets
         url={localhost}
@@ -107,16 +131,16 @@ export default function Home() {
         setMessage={setMessage}
       />
 
+      <main className="container">
+        <ToastMessages message={message} />
 
-
-
-      <main className={"container"}>
-
-        <ToastMessages message={message}/>
-
-        <SearchVolumio setMessage={setMessage} refresh={refresh} localhost={localhost} setRefresh={setRefresh} searchTerm={searchTerm} />
-
-
+        <SearchVolumio
+          setMessage={setMessage}
+          refresh={refresh}
+          localhost={localhost}
+          setRefresh={setRefresh}
+          searchTerm={searchTerm}
+        />
 
         <QueueList
           onMove={volumioSocketCmd}
@@ -128,9 +152,8 @@ export default function Home() {
           localhost={localhost}
           setMessage={setMessage}
           volumioSocketCmd={volumioSocketCmd}
+          queuePanel={queuePanel}
         />
-        
-      
 
         <PlayingNow
           g_token={g_token}
@@ -158,12 +181,11 @@ export default function Home() {
           setMessage={setMessage}
           localAPI={localAPI}
           setSearchTerm={setSearchTerm}
+          lyricsPanel={lyricsPanel}
+          lyricsSize={lyricsSize}
+          lyricsState={lyricsState}
         />
-
-
       </main>
-
-
     </div>
   );
 }

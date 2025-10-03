@@ -5,9 +5,10 @@ import Lyrics from './Lyrics';
 import Image from "next/image";
 
 
-function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm }) {
-  const [sizePanel, setSizePanel] = useState("");
-  const [openPanel, setOpenPanel] = useState(false);
+function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, localhost, setPlayingNow, setMessage, g_token, localAPI, setSearchTerm,lyricsPanel,lyricsSize, lyricsState }) {
+  const [sizePanel, setSizePanel] = useState(lyricsSize);
+  const [openPanel, setOpenPanel] = useState(lyricsPanel);
+
 
 
 
@@ -43,7 +44,7 @@ function LyricsNow({  refresh, setRefresh, token, response, volumioSocketCmd, lo
       <div className="contained">
         {response && (
           <>
-            <Lyrics localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} />
+            <Lyrics localAPI={localAPI} g_token={g_token} setMessage={setMessage} meta={response} refresh={refresh} localhost={localhost} setRefresh={setRefresh} token={token} variant="single" setPlayingNow={setPlayingNow} setSearchTerm={setSearchTerm} lyricsState={lyricsState} />
             
            
           </>

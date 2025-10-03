@@ -3,12 +3,12 @@ import Image from "next/image";
 import LyricsMetadata from "./LyricsMetadata";
 import GeniusMetadata from './GeniusMetadata';
 
-function Lyrics({meta, service, g_token,  setPlayingNow, setMessage, localAPI, setSearchTerm}) {
+function Lyrics({meta, service, g_token,  setPlayingNow, setMessage, localAPI, setSearchTerm, lyricsState}) {
 
 const [extraInfo, setExtraInfo] = useState(false)
-const [lyricsList, setLyricsList] = useState(false)
+const [lyricsList, setLyricsList] = useState(lyricsState)
 
-console.log(service,meta)
+//console.log(service,meta)
 
 
 

@@ -58,7 +58,7 @@ const WebSockets = ({ url, socketCommand, setResponseState, setResponseQueue, se
         socket.emit(socketCommand);
         //setMessage("")
       }
-      console.log(`Sent command: ${JSON.stringify(socketCommand)}`);
+      //console.log(`Sent command: ${JSON.stringify(socketCommand)}`);
     }
   }, [socket, socketCommand]);
 

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import AlbumArt from './ArtMulti';
 import Image from "next/image";
 
-const DraggableList = ({ onMove, items, setItems, localhost, token, volumioSocketCmd,editable }) => {
+const DraggableList = ({ onMove, items, setItems, localhost, token, volumioSocketCmd,editable, setMessage }) => {
 
 
   const [draggedItem, setDraggedItem] = useState(null);
@@ -84,6 +84,7 @@ const DraggableList = ({ onMove, items, setItems, localhost, token, volumioSocke
                 localhost={localhost}
                 token={token}
                 volumioSocketCmd={volumioSocketCmd}
+                setMessage={setMessage}
               />
               
               <button 

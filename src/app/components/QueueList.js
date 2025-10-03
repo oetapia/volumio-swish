@@ -5,13 +5,13 @@ import Image from "next/image";
 import RemoveFromQueue from './RemoveFromQueue';
 import DraggableList from "./DraggableDroppable";
 
-function QueueList({ response, token, volumioSocketCmd, localhost, onMove,playingNow }) {
-  const [openPanel, setOpenPanel] = useState(true);
+function QueueList({ response, token, volumioSocketCmd, localhost, onMove,playingNow, setMessage, queuePanel }) {
+  const [openPanel, setOpenPanel] = useState(queuePanel);
   const [items, setItems] = useState(response);
   const [editable, setEditable] = useState(false);
 
   useEffect(() => {
-    console.log("Requesting queue with getQueue command"); // Debug log to confirm
+    //console.log("Requesting queue with getQueue command"); // Debug log to confirm
     volumioSocketCmd(`getQueue`);
   }, [volumioSocketCmd]); // Depend on the function to ensure it's accessible
   
@@ -51,7 +51,7 @@ function QueueList({ response, token, volumioSocketCmd, localhost, onMove,playin
 
         </button>
           <div className={`queue queue-list scroll-list `}>
-          <DraggableList onMove={onMove} items={items} editable={editable} setItems={setItems} localhost={localhost} volumioSocketCmd={volumioSocketCmd} token={token} playingNow={playingNow}/>
+          <DraggableList onMove={onMove} items={items} editable={editable} setItems={setItems} localhost={localhost} volumioSocketCmd={volumioSocketCmd} token={token} playingNow={playingNow} setMessage={setMessage}/>
            
           </div>
         

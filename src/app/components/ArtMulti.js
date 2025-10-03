@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import PlayFromQueue from './PlayFromQueue';
 
-function ArtMulti({meta,  index, variant, volumioSocketCmd, localhost}) {
+function ArtMulti({meta,  index, variant, volumioSocketCmd, localhost, setMessage}) {
 
 	const [albumArt, setalbumArt] = useState("")
 
@@ -61,7 +61,12 @@ const defaultImageUrl = '/default-cover.png'; // Replace with the path to your d
   
 		  <div className="album-container">
 		  		{albumArt}
-				<PlayFromQueue index={index} localhost={localhost}></PlayFromQueue>
+				<PlayFromQueue 
+					index={index} 
+					localhost={localhost}
+					setMessage={setMessage}
+				
+				/>
 		  </div>
   
 		  <div className="meta">

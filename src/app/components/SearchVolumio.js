@@ -65,7 +65,7 @@ function SearchVolumio({ refresh, setRefresh, localhost, setMessage, searchTerm 
                 // Process "TIDAL Tracks" and "TIDAL Playlist" lists
                    newAlbumArt.local_albums = processList(json, "Albums '", "albums", 6);
                 // Process "TIDAL Tracks" and "TIDAL Playlist" lists
-                   newAlbumArt.youtube = processList(json, "Youtube '", "tracks", 9);
+                //   newAlbumArt.youtube = processList(json, "Videos", "tracks", 9);
                 // Process "TIDAL Tracks" and "TIDAL Playlist" lists
                 newAlbumArt.tracks = processList(json, "TIDAL Tracks", "tracks", 9);
                 newAlbumArt.playlists = processList(json, "TIDAL Playlist", "playlist", 3);
@@ -283,14 +283,14 @@ function SearchVolumio({ refresh, setRefresh, localhost, setMessage, searchTerm 
               </ul>
           </div>
       )}
-       {albumArt.youtube && (
+     {/*   {albumArt.youtube && (
           <div className="playlist">
               <h3>Youtube</h3>
               <ul className="queue-list">
                   {albumArt.youtube}
               </ul>
           </div>
-      )}
+      )} */}
         
         </>
        )

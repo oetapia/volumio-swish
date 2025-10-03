@@ -1,14 +1,15 @@
 import React from 'react';
 import Image from "next/image";
 
-function PlayFromQueue({ localhost,index }) {
+function PlayFromQueue({ localhost,index, setMessage }) {
 	// Set up a queue with an initial resolved promise
 
 
 	async function volumioCmd(command,number) {
-	console.log("inside play",command,number)
+	//console.log("inside play",command,number)
 	  const url = `${localhost}/api/v1/commands/?cmd=${command}&N=${number}`;
-	  console.log("inside play",url)
+	  //console.log("inside play",url)
+	  setMessage("Sent "+command+" "+number)
 	  try {
 		const response = await fetch(url);
 		if (!response.ok) {
@@ -16,6 +17,7 @@ function PlayFromQueue({ localhost,index }) {
 		}
 		const json = await response.json();
 		console.log(json);
+		setMessage("")
 	  } catch (error) {
 		console.error(error.message);
 	  }

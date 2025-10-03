@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AlbumArt from './ArtMulti';
 import Image from "next/image";
 
-function DraggableDroppable({items, setItems, localhost, token, volumioSocketCmd, onMove, playingNow}) {
+function DraggableDroppable({items, setItems, localhost, token, volumioSocketCmd, onMove, playingNow, setMessage}) {
   // Use refs to track previous items and playingNow for comparison
   const prevItemsRef = useRef(null);
   const prevPlayingNowRef = useRef(null);
@@ -80,6 +80,7 @@ function DraggableDroppable({items, setItems, localhost, token, volumioSocketCmd
                         localhost={localhost}
                         token={token}
                         volumioSocketCmd={volumioSocketCmd}
+                        setMessage={setMessage}
                       />
                     </div>
                   )}
